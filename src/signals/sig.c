@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:50 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/21 13:13:24 by evalieve      ########   odam.nl         */
+/*   Updated: 2023/12/21 15:07:31 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void signal_ctrl_c(int signum)
    
 	write(1, "\n", 1);
 	// ioctl(STDIN_FILENO, TIOCSTI, "\n");
-	// rl_replace_line("", 0);
+	rl_replace_line("", 0);
 	// rl_red
 	rl_on_new_line();
 	rl_redisplay();
