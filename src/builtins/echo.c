@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:31 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/18 15:56:11 by evalieve      ########   odam.nl         */
+/*   Updated: 2023/12/21 18:26:07 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	builtin_echo(t_cmds *cmd, t_minishell *minishell)
 	flag = false;
 	fd = get_fd_out(cmd);
 	i = 1;
-	// printf("in echo\n");
 	if (!cmd->args[i])
 		return (ft_putchar_fd('\n', fd));
 	if (is_flag(cmd->args[i]))

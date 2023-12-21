@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/21 13:14:22 by evalieve      ########   odam.nl         */
+/*   Updated: 2023/12/21 18:22:41 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef struct s_cmds
 	// ohjee ?? executor
 	int				fd_out;
 	int				fd_in;
+	int				pipe[2];
 	// ohjee ?? executor
 	bool			builtin;
 	bool			absolute;
@@ -236,6 +237,11 @@ int	iswhspace(char *str);
 void	ft_putstr_fd(char *s, int fd);
 int	ft_isalpha(int c);
 int	ft_isdigit(int c);
+
+/* REDIRECTIONS */
+void	handle_redir(t_cmds *node);
+void	handle_red_out(t_cmds *node);
+void	handle_red_in(t_cmds *node);
 
 /* SIGNALS */
 void signals(void);
