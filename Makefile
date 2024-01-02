@@ -16,6 +16,7 @@ SRCS =  src/builtins/cd.c		\
         src/signals/sig.c		\
 		src/tokenizer/tokenizer.c	\
 		src/tokenizer/redir.c \
+		src/tokenizer/expander.c \
         main.c
 
 SRC_DIR = src/
