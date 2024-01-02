@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:49 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/20 17:48:50 by evalieve      ########   odam.nl         */
+/*   Updated: 2023/12/21 18:27:32 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,8 +161,8 @@ void	exec_builtin(t_cmds *cmd, t_minishell *minishell)
 
 	// printf("yodiyo\n");
 	builtin = builtin_lookup(cmd->cmd);
-	if (!builtin.func)
-		return ; // error message (??) weet niet eens of dit kan gebeuren
+	//if (!builtin.func)
+		//return ; // error message (??) weet niet eens of dit kan gebeuren
 	builtin.func(cmd, minishell);
 }
 
@@ -220,7 +220,7 @@ void	exec_pipe(t_cmds *cmds, t_exec *exec, t_minishell *minishell)
 		close(exec->pipe[READ_END]);
 		close(exec->pipe[WRITE_END]);
 		redirect(cmds); // , minishell) ?
-		if (cmds->builtin)
+		if (cmds->builtin == true)
 		{
 			exec_builtin(cmds, minishell);
 			exit(minishell->status); // ?
@@ -240,8 +240,11 @@ void	exec_simple(t_cmds *cmd, t_minishell *minishell)
 
 	// status = 0;// ????
 	// printf("cmd->cmd = %s, absolute = %d\n", cmd->cmd, cmd->absolute);
-	if (cmd->builtin)
+	if (cmd->builtin == true)
+	{
+		//ft_putstr_fd("exec_simple: builtin\n", 1);
 		exec_builtin(cmd, minishell); // geen exit want geen fork
+	}
 	else
 	{
 		pid = fork();

@@ -15,6 +15,8 @@ SRCS =  src/builtins/cd.c		\
         src/executor/exec.c		\
         src/signals/sig.c		\
 		src/tokenizer/tokenizer.c	\
+		src/tokenizer/redir.c \
+		src/tokenizer/expander.c \
         main.c
 
 SRC_DIR = src/
@@ -39,12 +41,13 @@ endif
 
 all : $(LIBFT) $(NAME)
 
-$(OBJ_DIR)%.o : $(SRC_DIR)%.c
-	@mkdir -p $(@D)
-	@$(CC) $(INCL) $(CFLAGS) -c $< -o $@ 
 
 $(NAME) : $(OBJ)
-	$(CC) $(INCL) $(CFLAGS) -o $@ $^ $(LIBFT) -lreadline
+	$(CC) $(INCL) $(CFLAGS) -o $@ $^ $(LIBFT) -lreadline -L/opt/homebrew/opt/readline/lib
+
+$(OBJ_DIR)%.o : $(SRC_DIR)%.c
+	@mkdir -p $(@D)
+	@$(CC) $(INCL) $(CFLAGS) -c $< -o $@  -I/opt/homebrew/opt/readline/include 
 
 $(LIBFT) :
 	$(MAKE) -C libft

@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2023/12/20 17:51:23 by evalieve      ########   odam.nl         */
+/*   Updated: 2023/12/21 19:43:36 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,35 +70,6 @@ bool ft_isabsolute(char *command)
 
 void    remove_white(t_tokens *head);
 
-int	ft_isdigit(int c)
-{
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
-}
-
-int	ft_isalpha(int c)
-{
-	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
-		return (1);
-	return (0);
-}
-
-void	ft_putstr_fd(char *s, int fd)
-{
-	size_t i;
-
-	i = 0;
-	if (s)
-	{
-		while (s[i] != '\0')
-		{
-			write(fd, &s[i], 1);
-			i++;
-		}
-	}
-}
-
 int	iswhspace(char *str)
 {
 	if (!str)
@@ -136,8 +107,9 @@ void printlist(t_tokens *list)
 {
 	while (list != NULL)
 	{
-		// printf("value = (%s)\n", list->value);
-		// printf("type = %d\n", list->type);
+		printf("value = (%s)\n", list->value);
+		printf("type = %d\n", list->type);
+		printf("word = %d\n", list->word);
 		list = list->next;
 	}
 }
@@ -187,62 +159,6 @@ void *ft_malloc(size_t size)
 	return (ptr);
 }
 
-size_t	ft_strlen(const char *str)
-{
-	size_t i;
-
-	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
-char			*ft_strdup(const char *src)
-{
-	char	*dest;
-	size_t	i;
-	size_t	srclen;
-
-	i = 0;
-	srclen = ft_strlen(src);
-	dest = (malloc((srclen + 1) * sizeof(char)));
-	if (dest)
-	{
-		while (src[i] != '\0')
-		{
-			dest[i] = src[i];
-			i++;
-		}
-		dest[i] = '\0';
-	}
-	return (dest);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	size_t	i;
-	char	*dest;
-	size_t	l;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	l = ft_strlen(s);
-	dest = malloc((len + 1) * sizeof(char));
-	if (!dest)
-		return (NULL);
-	while (len > 0 && s[i] != '\0' && start < l)
-	{
-		dest[i] = s[start];
-		i++;
-		start++;
-		len--;
-	}
-	dest[i] = '\0';
-	//printf("value = %s\n", dest);
-	return (dest);
-}
-
 t_cmds *ft_nodenew(void)
 {
 	t_cmds *new;
@@ -250,6 +166,8 @@ t_cmds *ft_nodenew(void)
 	new = ft_malloc(1 *sizeof(t_cmds));
 	new->cmd = NULL;
 	// new->path = NULL;
+	new->fd_in = 0;
+	new->fd_out = 1;
 	new->args = NULL;
 	new->next = NULL;
 	new->prev = NULL;
@@ -604,8 +522,6 @@ char *find_var(char *var, t_env *env)
 	return (NULL);
 }
 
-
-
 char *check_var(char *line)
 {
 	int i;
@@ -726,6 +642,7 @@ t_cmds *makenodes(t_tokens *tokens)
 	t_cmds *list;
 
 	list = NULL;
+	//printlist(tokens);
 	while (tokens != NULL)
 	{
 		list = ft_nodeadd(list, ft_nodenew());
@@ -737,18 +654,27 @@ t_cmds *makenodes(t_tokens *tokens)
 				list->args = ft_addargs(tokens);
 				list->absolute = ft_isabsolute(list->cmd);
 				list->builtin = ft_checkbi(list->cmd);
+				//printf("builtin = %d\n", list->builtin);
 			}
 			else if (tokens->word == FIL || tokens->word == LIM)
 			{
+				//printf("kom ik hier?\n");
 				if (tokens->prev->type == RDOUT || tokens->prev->type == RDAPPND)
+				{
+					//printf("kom ik hier ook?\n");
 					list->out = ft_rediradd(list->out, ft_redirnew(tokens->value, tokens->prev->type));
+				}
 				else if (tokens->prev->type == RDHDOC || tokens->prev->type == RDIN)
+				{
+					//printf("type: %d\n", tokens->prev->type);
 					list->in = ft_rediradd(list->in, ft_redirnew(tokens->value, tokens->prev->type));
+				}
 				else
 					list->out = ft_rediradd(list->out, ft_redirnew(tokens->value, RDOUT));
 			}
 			tokens = tokens->next;
 		}
+		handle_redir(list);
 		if (tokens)
 			tokens = tokens->next;
 	}
@@ -791,7 +717,7 @@ t_tokens *idword(t_tokens *tokens)
 	cmd = false;
 	list = tokens;
 	prev = tokens;
-	printlist(tokens);
+	//printlist(tokens);
 	while (list)
 	{
 		// printf("idword\n");
@@ -807,10 +733,10 @@ t_tokens *idword(t_tokens *tokens)
 				cmd = true;
 				
 			}
-			else if (prev->type == CMD || prev->type == INPUT)
+			else if (prev->word == CMD || prev->word == INPUT)
 				list->word = INPUT;
 			else if (prev->type == RDHDOC)
-				list->word = LIM;
+				list->word = FIL;
 			else
 				list->word = FIL;
 		}
@@ -836,56 +762,31 @@ void printmini(t_minishell *mini)
 	while (node)
 	{
 		if (node->cmd)
-			// printf("command = %s\n", node->cmd);
+			printf("command = %s\n", node->cmd);
 		//printf("path = %s\n", node->path);
-		// for (int i = 0; node->args[i]; i++)
-		// 	printf("args = %s\n", node->args[0]);
+		//for (int i = 0; node->args[i]; i++)
+		 	//printf("args = %s\n", node->args[0]);
 		while (node->args && node->args[i])
 		{
-			// printf("args = %s\n", node->args[i]);
+			printf("args = %s\n", node->args[i]);
 			i++;
 		}
 		redir = node->in;
 		while (redir)
 		{
-			// printf("in = %s\n", redir->file);
+			printf("in = %s\n", redir->file);
+			printf("type = %d\n", redir->type);
 			redir = redir->next;
 		}
 		redir = node->out;
 		while (redir)
 		{
-			// printf("out = %s\n", redir->file);
+			printf("out = %s\n", redir->file);
+			printf("type = %d\n", redir->type);
 			redir = redir->next;
 		}
 		node = node->next;
 		i = 0;
-	}
-}
-
-void builtin_check(t_minishell *minishell)
-{
-	t_cmds *tmp;
-
-	tmp = minishell->cmds;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->cmd, "echo") == SUCCESS)
-			tmp->builtin = true;
-		else if (ft_strcmp(tmp->cmd, "cd") == SUCCESS)
-			tmp->builtin = true;
-		else if (ft_strcmp(tmp->cmd, "pwd") == SUCCESS)
-			tmp->builtin = true;
-		else if (ft_strcmp(tmp->cmd, "export") == SUCCESS)
-			tmp->builtin = true;
-		else if (ft_strcmp(tmp->cmd, "unset") == SUCCESS)
-			tmp->builtin = true;
-		else if (ft_strcmp(tmp->cmd, "env") == SUCCESS)
-			tmp->builtin = true;
-		else if (ft_strcmp(tmp->cmd, "exit") == SUCCESS)
-			tmp->builtin = true;
-		else
-			tmp->builtin = false;
-		tmp = tmp->next;
 	}
 }
 
@@ -915,7 +816,9 @@ t_cmds	*parse(t_minishell *minishell)
 	list = idtokens(list);
 	list = expand(list, minishell);
 	minishell->cmds = makenodes(list);
+	//printmini(minishell);
 	free_list(list);
+	//exit(1);
 	return (minishell->cmds);
 }
 

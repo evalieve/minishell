@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/21 13:14:22 by evalieve      ########   odam.nl         */
+/*   Updated: 2023/12/28 17:38:50 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef struct s_cmds
 	// ohjee ?? executor
 	int				fd_out;
 	int				fd_in;
+	int				pipe[2];
 	// ohjee ?? executor
 	bool			builtin;
 	bool			absolute;
@@ -200,12 +201,6 @@ t_tokens *idword(t_tokens *tokens);
 void    remove_white(t_tokens *head);
 t_cmds *makenodes(t_tokens *tokens);
 char **ft_addargs(t_tokens *tokens);
-t_tokens *expand(t_tokens *list, t_minishell *mini);
-int	check_lim(t_tokens *node);
-char *ft_expand(char *line, t_env *env, t_minishell *mini);
-char *ft_replace(char *line, char *var, char *value, int start);
-char *check_var(char *line);
-char *find_var(char *var, t_env *env);
 t_tokens *idtokens(t_tokens *list);
 t_tokens *mergetokens(t_tokens *list);
 int	compvalue(t_tokens *list, t_tokens *next);
@@ -223,19 +218,27 @@ t_tokens *ft_lstfirst(t_tokens *lst);
 t_tokens	*ft_lstlast_token(t_tokens *lst);
 t_tokens	*ft_lstnew_token(char *content, int quote);
 t_cmds *ft_nodenew(void);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char			*ft_strdup(const char *src);
-size_t	ft_strlen(const char *str);
 void *ft_malloc(size_t size);
-void	fatal(char *str);
+void	fatal(char *str, t_minishell *mini);
 char	*ft_strchr_delim(const char *s);
 int	is_delim(char c);
 void printlist(t_tokens *list);
 int	ft_memcmp(const void *str1, const void *str2, size_t n);
 int	iswhspace(char *str);
-void	ft_putstr_fd(char *s, int fd);
-int	ft_isalpha(int c);
-int	ft_isdigit(int c);
+
+/* REDIRECTIONS */
+void	handle_redir(t_cmds *node);
+void	handle_red_out(t_cmds *node);
+void	handle_red_in(t_cmds *node);
+
+/* EXPANDER */
+t_tokens *expand(t_tokens *list, t_minishell *mini);
+int	check_lim(t_tokens *node);
+char *ft_expand(char *line, t_env *env, t_minishell *mini);
+char *ft_replace(char *line, char *var, char *value, int start);
+char *check_var(char *line);
+char *find_var(char *var, t_env *env);
+
 
 /* SIGNALS */
 void signals(void);
