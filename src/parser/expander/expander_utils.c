@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:24:04 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/15 16:12:16 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/15 16:57:18 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ char	*check_var(char *line)
 	var = NULL;
 	if (ft_isalpha(line[i]) != 0 || line[i] == '_')
 		i++;
+	else if (line[0] == '\0')
+		return (ft_substr(line, 0, 0));
 	else
-		return (NULL);
+		return (ft_substr(line, 0, 1));
 	while (line && (ft_isalpha(line[i]) != 0 || \
 	ft_isdigit(line[i]) != 0 || line[i] == '_'))
 		i++;
