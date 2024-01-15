@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   syntax_check.c                                     :+:    :+:            */
+/*   fatal.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/12/28 17:31:30 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/08 17:58:30 by marlou        ########   odam.nl         */
+/*   Created: 2024/01/08 17:54:41 by marlou        #+#    #+#                 */
+/*   Updated: 2024/01/15 16:15:12 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	check_syntax(t_tokens *tokens, t_minishell *mini)
+void	fatal(char *str)
 {
-	t_tokens *tmp;
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(str, 2);
+	perror(NULL);
+	exit(FAILURE);
+}
 
-	tmp = tokens;
-	while (tmp && tmp->next)
-	{
-		if (tmp->type == PIPE && tmp->next->type == PIPE)
-		{
-			free_list(tokens);
-			ft_putstr_fd("minishell: Error: syntax error near unexpected token `||'\n", 2);
-			mini->status = 1;
-			return (1);
-		}
-		tmp = tmp->next;
-	}
-	return (0);
+void	non_fatal(char *str)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(str, 2);
+	perror(NULL);
 }

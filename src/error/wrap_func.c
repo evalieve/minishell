@@ -1,32 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   syntax_check.c                                     :+:    :+:            */
+/*   wrap_func.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/12/28 17:31:30 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/08 17:58:30 by marlou        ########   odam.nl         */
+/*   Created: 2024/01/08 16:48:42 by marlou        #+#    #+#                 */
+/*   Updated: 2024/01/15 16:15:36 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	check_syntax(t_tokens *tokens, t_minishell *mini)
+void *ft_malloc(size_t size)
 {
-	t_tokens *tmp;
+	void *ptr;
 
-	tmp = tokens;
-	while (tmp && tmp->next)
+	ptr = malloc(size);
+	if (!ptr)
 	{
-		if (tmp->type == PIPE && tmp->next->type == PIPE)
-		{
-			free_list(tokens);
-			ft_putstr_fd("minishell: Error: syntax error near unexpected token `||'\n", 2);
-			mini->status = 1;
-			return (1);
-		}
-		tmp = tmp->next;
+		fatal("malloc ");
+		return (NULL);
+	}
+	return (ptr);
+}
+
+int ft_close(int fd)
+{
+	if (close(fd) == -1)
+	{
+		fatal("close ");
+		return (-1);
 	}
 	return (0);
+}
+
+int ft_open(char *file, int flag, int mode)
+{
+	int fd;
+
+	fd = open(file, flag, mode);
+	if (fd == -1)
+	{
+		non_fatal("open ");
+		return (-1);
+	}
+	return (fd);
 }

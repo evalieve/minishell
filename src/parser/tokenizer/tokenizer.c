@@ -6,11 +6,11 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/02 16:22:46 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/09 13:57:46 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
 t_tokens *idword(t_tokens *tokens);
 
@@ -122,19 +122,6 @@ char	*ft_strchr_delim(const char *s)
 		i++;
 	}
 	return (NULL);
-}
-
-void *ft_malloc(size_t size)
-{
-	void *ptr;
-
-	ptr = malloc(size);
-	if (!ptr)
-	{
-		fatal("malloc fail\n");
-		return (NULL);
-	}
-	return (ptr);
 }
 
 t_cmds *ft_nodenew(void)
@@ -694,6 +681,11 @@ t_cmds	*parse(t_minishell *minishell)
 	}
 	list = mergetokens(ft_lstfirst(list));
 	list = idtokens(list);
+	if (check_syntax(list, minishell) == 1)
+	{
+		minishell->status = E_SYNTAX_ERROR;
+		return (NULL);
+	}
 	list = expand(list, minishell);
 	minishell->cmds = makenodes(list);
 	//printmini(minishell);
