@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/28 17:38:50 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/15 18:39:22 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef enum e_status
 	E_CTRL_C = 130,
 	E_CTRL_BACKSLASH = 131,
 	E_UNKNOWN = 255,
+	E_SYNTAX_ERROR = 258,
 	// status nums -> als status -42 is dan error minishell en exit-> -1
 }	t_status;
 
@@ -107,6 +108,7 @@ typedef struct s_cmds
 	int				fd_out;
 	int				fd_in;
 	int				pipe[2];
+	pid_t			pid;
 	// ohjee ?? executor
 	bool			builtin;
 	bool			absolute;
@@ -219,7 +221,6 @@ t_tokens	*ft_lstlast_token(t_tokens *lst);
 t_tokens	*ft_lstnew_token(char *content, int quote);
 t_cmds *ft_nodenew(void);
 void *ft_malloc(size_t size);
-void	fatal(char *str, t_minishell *mini);
 char	*ft_strchr_delim(const char *s);
 int	is_delim(char c);
 void printlist(t_tokens *list);
@@ -227,17 +228,42 @@ int	ft_memcmp(const void *str1, const void *str2, size_t n);
 int	iswhspace(char *str);
 
 /* REDIRECTIONS */
+char	*heredoc_loop(char *line, t_cmds *node);
 void	handle_redir(t_cmds *node);
 void	handle_red_out(t_cmds *node);
 void	handle_red_in(t_cmds *node);
 
 /* EXPANDER */
-t_tokens *expand(t_tokens *list, t_minishell *mini);
+
+t_tokens	*expand(t_tokens *list, t_minishell *mini);
+char	*ft_expand(char *line, t_minishell *mini);
+char	*expand_exit(char *line, t_minishell *mini, int i);
+char	*expand_var(char *line, t_minishell *mini, int i);
+
 int	check_lim(t_tokens *node);
-char *ft_expand(char *line, t_env *env, t_minishell *mini);
 char *ft_replace(char *line, char *var, char *value, int start);
 char *check_var(char *line);
 char *find_var(char *var, t_env *env);
+
+/* ERROR */
+
+int	check_syntax(t_tokens *tokens, t_minishell *mini);
+void	free_env(t_env *env);
+void	free_node(t_cmds *node);
+void	free_redir(t_redir *redir);
+void	free_args(char **args);
+void	free_list(t_tokens *list);
+void	fatal(char *str);
+void	non_fatal(char *str);
+void	free_all(t_minishell *mini);
+
+void *ft_malloc(size_t size);
+int ft_close(int fd);
+int ft_open(char *file, int flag, int mode);
+pid_t	ft_fork(void);
+void	ft_pipe(int *p);
+pid_t	ft_waitpid(pid_t pid, int *status, int option);
+int	ft_dup2(int fd1, int fd2);
 
 
 /* SIGNALS */

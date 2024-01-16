@@ -42,6 +42,8 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			add_history(minishell->line);
 			minishell->cmds = parse(minishell);
+			if (minishell->status == E_SYNTAX_ERROR)
+				continue ;
 			executor(minishell);
 		}
 		

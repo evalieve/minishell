@@ -6,11 +6,11 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/02 16:22:46 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/15 18:45:48 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
 t_tokens *idword(t_tokens *tokens);
 
@@ -39,7 +39,6 @@ bool ft_isabsolute(char *command)
 	int i;
 
 	i = 0;
-	// printf("command = %s\n", command);
 	while (command[i] != '\0')
 	{
 		if (command[i] == '/')
@@ -49,7 +48,6 @@ bool ft_isabsolute(char *command)
 		}
 		i++;
 	}
-	// printf("false ret\n");
 	return (false);
 }
 
@@ -124,19 +122,6 @@ char	*ft_strchr_delim(const char *s)
 	return (NULL);
 }
 
-void *ft_malloc(size_t size)
-{
-	void *ptr;
-
-	ptr = malloc(size);
-	if (!ptr)
-	{
-		fatal("malloc fail\n");
-		return (NULL);
-	}
-	return (ptr);
-}
-
 t_cmds *ft_nodenew(void)
 {
 	t_cmds *new;
@@ -153,6 +138,7 @@ t_cmds *ft_nodenew(void)
 	new->absolute = false;
 	new->in = NULL;
 	new->out = NULL;
+	new->pid = 0;
 	return (new);
 }
 
@@ -168,7 +154,6 @@ t_tokens	*ft_lstnew_token(char *content, int quote)
 	new->next = NULL;
 	new->type = -1;
 	new->word = -1;
-	//printf("lstnew = %s\n", new->value);
 	return (new);
 }
 
@@ -250,13 +235,10 @@ t_tokens	*ft_lstadd(t_tokens *lst, t_tokens *new)
 		if (new->next)
 			new->next->prev = new;
 		list = new;
-		//printf("lstadd = %s\n", new->value);
-		//printf("lstaddprev = %s\n", new->prev->value);
 		return (list);
 	}
 	else if (lst == NULL && new)
 	{
-		//printf("lstadd = %s\n", new->value);
 		list = new;
 		return (list);
 	}
@@ -307,19 +289,13 @@ t_tokens *split_input(t_tokens *old)
 				rest = ft_strchr_delim(last->value);
 				new = ft_substr(last->value, 0, ft_strlen(last->value) - ft_strlen(rest));
 			}
-			//printf("rest = %s\n", rest);
-			//printf("new = %s\n", new);
-			//printf("length rest = %zu\n", ft_strlen(rest));
 			if (ft_strlen(rest) > 0)
 				ft_lstadd(last, ft_lstnew_token(ft_strdup(rest), 0));
 			free(last->value);
 			last->value = new;
 		}
 		last = last->next;
-		//printf("gaat alles wel facking goed\n");
 	}
-	//printf("is het einde nabij\n");
-	//printlist(ft_lstfirst(last));
 	if (last != NULL)
 		return (last);
 	else 
@@ -330,26 +306,16 @@ int closedquote(char *line, char quote)
 {
 	int end;
 
-	// t_tokens *node;
-
-	// node = list;
 	end = 0;
-	//write(1, &quote, 1);
 	while (line[end] != '\0' && line[end] != quote)
-	{
-		//write(1, &line[end], 1);
 		end++;
-	}
 	if (line[end] == '\0')
 	{
-		//write(1, "OOF\n", 4); //fatal("unclosed quotes");
+		ft_putstr_fd("minishell: syntax error: unclosed quotes\n", 2);
 		return (-1);
 	}
 	else if (line[end] == quote)
-	{
-		return (end);//list = ft_lstadd(ft_lstlast_token(node), ft_lstnew_token(ft_substr(line, 0, end), quote));
-		//printf("valuelistquote = %s\n", node->value);
-	}
+		return (end);
 	return (end);
 }
 
@@ -367,19 +333,20 @@ t_tokens	*quotes(char *line)
 		while (line[end] != '\0' && line[end] != '\'' && line[end] != '\"')
 			end++;
 		if (end != start)
-		{
 			list = ft_lstadd(ft_lstlast_token(list), ft_lstnew_token(ft_substr(line, start, end - start), 0));
-			//printf("valuelist = %s\n", list->value);
-		}
 		else if (line[end] == '\'' || line[end] == '\"')
 		{
 			start = end;
 			end = closedquote(&line[start + 1], line[start]);
+			if (end == -1)
+			{
+				free_list(list);
+				return (NULL);
+			}
 			list = ft_lstadd(ft_lstlast_token(list), ft_lstnew_token(ft_substr(line, start + 1, end), line[start]));
 			end = end + start + 2;
 		}
 		start = end;
-		//printf("end = %d\n", end);
 	}
 	return (ft_lstlast_token(list));
 }
@@ -395,8 +362,7 @@ void    combine_words(t_tokens *head)
         {
             ft_append(&(temp->value), temp->next->value, temp->next->len);
             if (!temp->value)
-                return ; // error met malloc
-            // printf("temp->value in combine words: %s\n", temp->value);
+                return ;
             temp->len += temp->next->len;
             ft_lstremove(temp->next);
         }
@@ -495,13 +461,11 @@ char **ft_addargs(t_tokens *tokens)
 	i = 0;
 	args = NULL;
 	temp = tokens;
-	// printf("[addargs] tokens->value = %s\n", tokens->value);
 	while (temp && (temp->word == INPUT || temp->word == CMD))
 	{
 		i++;
 		temp = temp->next;
 	}
-	// printf("[addargs] i = %d\n", i);
 	temp = tokens;
 	args = malloc((i + 1) * sizeof(char *));
 	args[i] = NULL;
@@ -510,7 +474,6 @@ char **ft_addargs(t_tokens *tokens)
 	while (i < j)
 	{
 		args[i] = ft_strdup(temp->value);
-		// printf("args[%d] = %s\n", i, args[i]);
 		i++;
 		temp = temp->next;
 	}
@@ -522,7 +485,6 @@ t_cmds *makenodes(t_tokens *tokens)
 	t_cmds *list;
 
 	list = NULL;
-	//printlist(tokens);
 	while (tokens != NULL)
 	{
 		list = ft_nodeadd(list, ft_nodenew());
@@ -534,21 +496,13 @@ t_cmds *makenodes(t_tokens *tokens)
 				list->args = ft_addargs(tokens);
 				list->absolute = ft_isabsolute(list->cmd);
 				list->builtin = ft_checkbi(list->cmd);
-				//printf("builtin = %d\n", list->builtin);
 			}
 			else if (tokens->word == FIL || tokens->word == LIM)
 			{
-				//printf("kom ik hier?\n");
 				if (tokens->prev->type == RDOUT || tokens->prev->type == RDAPPND)
-				{
-					//printf("kom ik hier ook?\n");
 					list->out = ft_rediradd(list->out, ft_redirnew(tokens->value, tokens->prev->type));
-				}
 				else if (tokens->prev->type == RDHDOC || tokens->prev->type == RDIN)
-				{
-					//printf("type: %d\n", tokens->prev->type);
 					list->in = ft_rediradd(list->in, ft_redirnew(tokens->value, tokens->prev->type));
-				}
 				else
 					list->out = ft_rediradd(list->out, ft_redirnew(tokens->value, RDOUT));
 			}
@@ -597,10 +551,8 @@ t_tokens *idword(t_tokens *tokens)
 	cmd = false;
 	list = tokens;
 	prev = tokens;
-	//printlist(tokens);
 	while (list)
 	{
-		// printf("idword\n");
 		if (list->type == PIPE)
 			cmd = false;
 		else if (list->type == WORD)
@@ -611,7 +563,6 @@ t_tokens *idword(t_tokens *tokens)
 			{
 				list->word = CMD;
 				cmd = true;
-				
 			}
 			else if (prev->word == CMD || prev->word == INPUT)
 				list->word = INPUT;
@@ -622,52 +573,8 @@ t_tokens *idword(t_tokens *tokens)
 		}
 		prev = NULL;
 		list = list->next;
-			//als (whsp) niets ervoor of (whsp) pipe ervoor of (whsp) file ervoor > CMD
-			//als (whsp) redir ervoor-> FILE
-			//als (whsp) rdhdoc ervoor -> LIM
-			//als (whsp) cmd ervoor of (whsp)input ervoor -> INPUT
-			//als command al geweest is maar CMD dan FILE (check redir type of uitmaakt
 	}
 	return (ft_lstfirst(tokens));
-}
-
-void printmini(t_minishell *mini)
-{
-	t_cmds *node;
-	t_redir *redir;
-	int i = 0;
-
-	node = mini->cmds;
-	// printf("print node functie\n");
-	while (node)
-	{
-		if (node->cmd)
-			printf("command = %s\n", node->cmd);
-		//printf("path = %s\n", node->path);
-		//for (int i = 0; node->args[i]; i++)
-		 	//printf("args = %s\n", node->args[0]);
-		while (node->args && node->args[i])
-		{
-			printf("args = %s\n", node->args[i]);
-			i++;
-		}
-		redir = node->in;
-		while (redir)
-		{
-			printf("in = %s\n", redir->file);
-			printf("type = %d\n", redir->type);
-			redir = redir->next;
-		}
-		redir = node->out;
-		while (redir)
-		{
-			printf("out = %s\n", redir->file);
-			printf("type = %d\n", redir->type);
-			redir = redir->next;
-		}
-		node = node->next;
-		i = 0;
-	}
 }
 
 t_cmds	*parse(t_minishell *minishell)
@@ -677,6 +584,11 @@ t_cmds	*parse(t_minishell *minishell)
 
 	line = minishell->line;
 	list = quotes(line);
+	if (list == NULL)
+	{
+		minishell->status = E_SYNTAX_ERROR;
+		return (NULL);
+	}
 	while (list->prev)
 		list = list->prev;
 	while (1)
@@ -694,30 +606,13 @@ t_cmds	*parse(t_minishell *minishell)
 	}
 	list = mergetokens(ft_lstfirst(list));
 	list = idtokens(list);
+	if (check_syntax(list, minishell) == 1)
+	{
+		minishell->status = E_SYNTAX_ERROR;
+		return (NULL);
+	}
 	list = expand(list, minishell);
 	minishell->cmds = makenodes(list);
-	//printmini(minishell);
 	free_list(list);
-	//exit(1);
 	return (minishell->cmds);
 }
-
-// int main(int argc, char **args, char *envp[])
-// {
-// 	t_minishell *minishell;
-	
-// 	(void)argc;
-// 	(void)args;
-// 	minishell = init_struct(envp);
-// 	while (1)
-// 	{
-// 		minishell->line = readline("minishell> ");
-// 		add_history(minishell->line);
-// 		parse(minishell);
-// 		printmini(minishell);
-// 		//exit(0);
-// 	}
-// 	return (0);
-// }
-
-//plus 1
