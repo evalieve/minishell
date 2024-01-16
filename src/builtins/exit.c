@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:35 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/21 12:55:17 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 15:26:23 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,12 @@ void	builtin_exit(t_cmds *cmd, t_minishell *minishell)
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(cmd->args[1], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
-			minishell->status = 255;
+			minishell->status = E_UNKNOWN;
 		}
 		else if (cmd->args[2] && exit_status != OLD_STATUS && !semicolumn(cmd->args[1])) // && cmd->args[1] heeft geen ; en is numeric
 		{
 			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-			minishell->status = 1;
+			minishell->status = E_FAILURE;
 			return ;
 		}
 		else if (exit_status != OLD_STATUS)

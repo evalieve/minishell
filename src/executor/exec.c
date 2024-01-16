@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:49 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/21 18:27:32 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/16 15:27:05 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	ft_strcmp(const char *s1, const char *s2)
 {
 	int	i;
-	
+
 	i = 0;
 	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
@@ -43,48 +43,33 @@ char	*get_path(char *cmd, t_env *env)
 	i = 0;
 	paths = NULL;
 	path = NULL;
-	// ptr = env;
-	// while (ptr)
-	// {
-	// 	printf("[get_path] %s=%s\n", ptr->key, ptr->value);
-	// 	ptr = ptr->next;
-	// }
 	ptr = env;
-	// printf("[get_path] cmd: %s\n", cmd);
 	while (ptr)
 	{
-		// printf("[get_path] %s=%s\n", ptr->key, ptr->value);
 		if (ft_strcmp(ptr->key, "PATH") == SUCCESS)
 		{
-			// printf("[get_path] found path (!!!)\n");
 			path = ft_strdup(ptr->value);
 			break ;
 		}
 		ptr = ptr->next;
 	}
-	// printf("[get_path] path: %s\n", path);
 	paths = ft_split(path, ':');
-	// printf("[get_path] paths[%d]: %s\n", i, paths[i]);
 	free(path);
 	while (paths[i])
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		path = ft_strjoin(tmp, cmd);
 		free(tmp);
-		// printf("[get_path] path: %s\n", path);
 		if (access(path, X_OK) == SUCCESS)
-		{
-			// printf("[get_path] path SUCCESS access(): %s\n", path);
 			return (path); // break ; kan nu ook vgm met path = NULL iden
-		}
 		free(path);
 		i++;
 	}
 	free(paths); // ?
-	// printf("[get_path] path EIND: %s\n", path);
 	return (NULL);
 }
 
+// Malloc error checken bij envp (wrap functie)
 char	**env_to_envp(t_env *env)
 {
 	t_env	*ptr;
@@ -101,7 +86,7 @@ char	**env_to_envp(t_env *env)
 	}
 	envp = (char **)malloc(sizeof(char *) * (i + 1));
 	if (!envp)
-		return (NULL); // error
+		return (NULL);
 	i = 0;
 	while (env)
 	{
@@ -115,39 +100,40 @@ char	**env_to_envp(t_env *env)
 	return (envp);
 }
 
+// errors checken
 void	redirect(t_cmds *cmd)
 {
 	if (cmd->fd_in == ERROR)
-		return ; // overslaan !
+		return ;
 	if (cmd->fd_out == ERROR)
-		return ; // overslaan !
+		return ;
 	if (cmd->fd_in > 0)
 	{
 		dup2(cmd->fd_in, STDIN_FILENO);
 		close(cmd->fd_in);
-        cmd->fd_in = STDIN_FILENO;
+		cmd->fd_in = STDIN_FILENO;
 	}
 	if (cmd->fd_out > 1)
 	{
 		dup2(cmd->fd_out, STDOUT_FILENO);
 		close(cmd->fd_out);
-        cmd->fd_out = STDOUT_FILENO;
+		cmd->fd_out = STDOUT_FILENO;
 	}
 }
 
 static t_builtin	builtin_lookup(char *cmd)
 {
+	int						i;
 	static const t_builtin	lookup[] = {
-		{"echo", builtin_echo},
-		{"cd", builtin_cd},
-		{"pwd", builtin_pwd},
-		{"export", builtin_export},
-		{"unset", builtin_unset},
-		{"env", builtin_env},
-		{"exit", builtin_exit},
-		{NULL, NULL}
+	{"echo", builtin_echo},
+	{"cd", builtin_cd},
+	{"pwd", builtin_pwd},
+	{"export", builtin_export},
+	{"unset", builtin_unset},
+	{"env", builtin_env},
+	{"exit", builtin_exit},
+	{NULL, NULL}
 	};
-	int	i;
 
 	i = 0;
 	while (lookup[i].cmd && ft_strcmp(lookup[i].cmd, cmd))
@@ -155,24 +141,26 @@ static t_builtin	builtin_lookup(char *cmd)
 	return (lookup[i]);
 }
 
+// error message (??) weet niet eens of dit kan gebeuren [BIJ RETURN ;]
 void	exec_builtin(t_cmds *cmd, t_minishell *minishell)
 {
 	t_builtin	builtin;
 
-	// printf("yodiyo\n");
 	builtin = builtin_lookup(cmd->cmd);
-	//if (!builtin.func)
-		//return ; // error message (??) weet niet eens of dit kan gebeuren
+	if (!builtin.func)
+		return ;
 	builtin.func(cmd, minishell);
 }
 
+// errors checken en kijken of hier geen functie voor is
+// exit code, child exit na non builtin + error message bij beide errors
 void	exec_command(t_cmds *cmd, t_minishell *minishell)
 {
 	char	*path;
 	char	**envp;
 
 	envp = env_to_envp(minishell->env);
-	if (cmd->absolute) // was else if met die hierboven
+	if (cmd->absolute)
 	{
 		if (access(cmd->cmd, X_OK) == ERROR)
 		{
@@ -180,7 +168,7 @@ void	exec_command(t_cmds *cmd, t_minishell *minishell)
 			write(2, "minishell: ", 11);
 			write(2, cmd->cmd, ft_strlen(cmd->cmd));
 			write(2, ": No such file or directory\n", 29);
-			exit(127); // exit code, child exit na non builtin + error message
+			exit(E_NO_SUCH_FILE_OR_DIRECTORY);
 		}
 		execve(cmd->cmd, cmd->args, envp);
 	}
@@ -193,21 +181,21 @@ void	exec_command(t_cmds *cmd, t_minishell *minishell)
 			write(2, "minishell: ", 11);
 			write(2, cmd->cmd, ft_strlen(cmd->cmd));
 			write(2, ": No such file or directory\n", 29);
-			exit(127); // exit code, child exit na non builtin + error message
+			exit(E_NO_SUCH_FILE_OR_DIRECTORY);
 		}
 		execve(path, cmd->args, envp);
 	}
 }
 
+// error message bij return als pipe errort en pid errort
 void	exec_pipe(t_cmds *cmds, t_exec *exec, t_minishell *minishell)
 {
-	int	status;
-
 	if (pipe(exec->pipe) == ERROR)
-		return ; // error message
+		return ;
 	exec->pid = fork();
 	if (exec->pid == ERROR)
-		return ; // error message
+		return ;
+	cmds->pid = exec->pid;
 	if (exec->pid == CHILD)
 	{
 		if (exec->prev_read)
@@ -219,55 +207,52 @@ void	exec_pipe(t_cmds *cmds, t_exec *exec, t_minishell *minishell)
 			dup2(exec->pipe[WRITE_END], STDOUT_FILENO);
 		close(exec->pipe[READ_END]);
 		close(exec->pipe[WRITE_END]);
-		redirect(cmds); // , minishell) ?
-		if (cmds->builtin == true)
+		redirect(cmds);
+		if (cmds->builtin)
 		{
 			exec_builtin(cmds, minishell);
-			exit(minishell->status); // ?
+			exit(minishell->status);
 		}
 		else
 			exec_command(cmds, minishell);
 	}
-	else
-		waitpid(exec->pid, &status, 0);
-	minishell->status = WEXITSTATUS(status);
 }
 
+// error message bij return als pid errort
 void	exec_simple(t_cmds *cmd, t_minishell *minishell)
 {
-	int	pid;
-	int	status;
-
-	// status = 0;// ????
-	// printf("cmd->cmd = %s, absolute = %d\n", cmd->cmd, cmd->absolute);
-	if (cmd->builtin == true)
-	{
-		//ft_putstr_fd("exec_simple: builtin\n", 1);
-		exec_builtin(cmd, minishell); // geen exit want geen fork
-	}
+	if (cmd->builtin)
+		exec_builtin(cmd, minishell);
 	else
 	{
-		pid = fork();
-		if (pid == ERROR)
-			return ; // error message
-		if (pid == CHILD)
+		minishell->cmds->pid = fork();
+		if (minishell->cmds->pid == ERROR)
+			return ;
+		if (minishell->cmds->pid == CHILD)
 		{
-			redirect(cmd); // , minishell) ?
+			redirect(cmd);
 			exec_command(cmd, minishell);
 		}
-		else
-			waitpid(pid, &status, 0);
-		minishell->status = WEXITSTATUS(status); // want als builtin was, dan is status al set
 	}
-		// printf("\n[exec_simple] [parent] [%s] status: %d\n", cmd->cmd, status);
-		// printf("[exec_simple] [parent] [%s] WEXITSTATUS(status): %d\n", cmd->cmd, WEXITSTATUS(status));
-		// printf("[exec_simple] [parent] [%s] minishell->status: %d\n\n", cmd->cmd, minishell->status);
+}
+
+int	lst_len(t_cmds *cmds)
+{
+	int	len;
+
+	len = 0;
+	while (cmds)
+	{
+		len++;
+		cmds = cmds->next;
+	}
+	return (len);
 }
 
 void	executor(t_minishell *minishell)
 {
-	t_exec exec;
-	t_cmds *tmp;
+	t_exec	exec;
+	t_cmds	*tmp;
 
 	tmp = minishell->cmds;
 	if (tmp->next)
@@ -281,7 +266,6 @@ void	executor(t_minishell *minishell)
 			close(exec.pipe[WRITE_END]);
 			tmp = tmp->next;
 		}
-		// close(exec.prev_read);
 		close(exec.pipe[READ_END]);
 	}
 	else

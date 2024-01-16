@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:50 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/02 16:12:40 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 15:27:40 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 void signal_ctrl_d(void)
 {
-	write(1, " exit\n", 7);
+	write(1, "exit\n", 6);
 	exit(0);
 }
 

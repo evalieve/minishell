@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/15 18:39:22 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/16 15:27:28 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef enum e_status
 	E_SUCCESS = 0,
 	E_FAILURE = 1,
 	E_COMMAND_NOT_FOUND = 127,
+	E_NO_SUCH_FILE_OR_DIRECTORY = 127,
 	E_INVALID_ARGUMENT = 128,
 	E_CTRL_C = 130,
 	E_CTRL_BACKSLASH = 131,

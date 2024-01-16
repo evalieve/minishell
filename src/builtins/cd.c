@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:28 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/18 15:03:53 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 15:26:52 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,24 @@ void	builtin_cd(t_cmds *cmd, t_minishell *minishell)
 		path = cmd->args[1];
 	if (chdir(path) == ERROR)
 	{
-		minishell->status = 1;
-		write(STDERR_FILENO, "cd: ", 4);
-		perror(cmd->args[1]);
+		minishell->status = E_FAILURE;
+		write(STDERR_FILENO, "minishell: cd: ", 16);
+		perror(cmd->args[1]); // path?!! (TODO)
 	}
 	// geen input cd??? else 
-	
+	// path moet nog gefreed worden nadat deze is verkregen uit return_value()... !!! (TODO)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		minishell->status = 1;
-		printf("error getting cwd\n"); // TODO: error management
+		minishell->status = E_FAILURE;
+		write(STDERR_FILENO, "minishell: cd: ", 16);
+		perror(NULL);
+		// minishell->status = E_FAILURE;
+		// printf("error getting cwd\n"); // TODO: error management
 	}
 	else
 	{
-		minishell->status = 0;
+		minishell->status = E_SUCCESS;
 		pwd = ft_strjoin("PWD=", cwd);
 		oldpwd = ft_strjoin("OLDPWD=", minishell->pwd); // checken wanneer value pwd null is?? of niet bestaat dus 
 		if (!oldpwd)

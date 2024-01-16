@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/15 18:45:48 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/16 15:28:47 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ bool ft_isabsolute(char *command)
 	{
 		if (command[i] == '/')
 		{
-			printf("true ret\n");
+			// printf("true ret\n");
 			return (true);
 		}
 		i++;

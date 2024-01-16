@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:31 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/21 18:26:07 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/16 15:26:07 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 bool	is_flag(char *arg)
 {
-	int i;
+	int	i;
 
 	i = 2;
 	if (arg[0] == '-' && arg[1] == 'n')
