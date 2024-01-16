@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:54:41 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/15 18:38:45 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/16 16:07:44 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void	fatal(char *str)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(str, 2);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(str, STDERR_FILENO);
 	perror(NULL);
 	exit(FAILURE);
 }
 
-void	non_fatal(char *str)
+void	non_fatal(char *str, char *pstr)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(str, 2);
-	perror(NULL);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(str, STDERR_FILENO);
+	perror(pstr);
 }

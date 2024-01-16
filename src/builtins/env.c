@@ -6,12 +6,11 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:33 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:26:15 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 15:39:44 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-// #include "../../include/minishell.h"
 
 void	print_env_line(t_env *env, int fd)
 {

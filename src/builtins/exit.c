@@ -6,12 +6,11 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:35 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:26:23 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 15:39:43 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-// #include "../include/minishell.h"
 
 bool	semicolumn(char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:27:28 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 19:23:53 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ void	free_redir(t_redir *redir);
 void	free_args(char **args);
 void	free_list(t_tokens *list);
 void	fatal(char *str);
-void	non_fatal(char *str);
+void	non_fatal(char *str, char *pstr);
 void	free_all(t_minishell *mini);
 
 void *ft_malloc(size_t size);

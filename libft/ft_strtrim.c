@@ -6,7 +6,7 @@
 /*   By: evan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/14 14:18:23 by evan-der      #+#    #+#                 */
-/*   Updated: 2021/03/01 09:44:06 by evan-der      ########   odam.nl         */
+/*   Updated: 2024/01/16 19:12:46 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 		begin++;
 	while (end > begin && ft_search_set(set, s1[end - 1]))
 		end--;
-	s2 = (char *)malloc(sizeof(char) * (end - begin + 1));
-	if (!s2)
-		return (0);
+	s2 = (char *)ft_malloc(sizeof(char) * (end - begin + 1));
 	ft_strlcpy(s2, &s1[begin], end - begin + 1);
 	return (s2);
 }

@@ -6,12 +6,11 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:31 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:26:07 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 15:39:44 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-// #include "../include/minishell.h"
 
 bool	is_flag(char *arg)
 {

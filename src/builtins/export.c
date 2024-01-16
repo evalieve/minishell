@@ -6,12 +6,11 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:36 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:26:29 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 19:13:25 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-// #include "../../include/minishell.h"
 
 char	*get_key(char *arg)
 {
@@ -61,9 +60,7 @@ void	add_to_env(t_env *env, char *arg, bool equal_sign)
 	t_env	*new;
 
 	ptr = env;
-	new = malloc(sizeof(t_env));
-	if (!new)
-		return ; // error message function (TODO)
+	new = (t_env *)ft_malloc(sizeof(t_env));
 	new->key = get_key(arg);
 	new->equal_sign = equal_sign;
 	if (!new->equal_sign)

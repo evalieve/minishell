@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 16:48:42 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/15 16:15:36 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/16 18:41:04 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int ft_open(char *file, int flag, int mode)
 	fd = open(file, flag, mode);
 	if (fd == -1)
 	{
-		non_fatal("open ");
+		non_fatal("open ", NULL);
 		return (-1);
 	}
 	return (fd);

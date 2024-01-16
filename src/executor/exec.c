@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:49 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:27:05 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 19:20:35 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ char	*get_path(char *cmd, t_env *env)
 	return (NULL);
 }
 
-// Malloc error checken bij envp (wrap functie)
 char	**env_to_envp(t_env *env)
 {
 	t_env	*ptr;
@@ -84,9 +83,7 @@ char	**env_to_envp(t_env *env)
 		i++;
 		ptr = ptr->next;
 	}
-	envp = (char **)malloc(sizeof(char *) * (i + 1));
-	if (!envp)
-		return (NULL);
+	envp = (char **)ft_malloc(sizeof(char *) * (i + 1));
 	i = 0;
 	while (env)
 	{
