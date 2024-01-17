@@ -25,14 +25,17 @@ void	wait_for_child(t_minishell *minishell)
 	int status;
 
 	t_cmds *ptr = minishell->cmds;
-	if (ptr->pid == 0)
-		return ;
-	while (ptr)
+	while (ptr->next)
 	{
-		waitpid(ptr->pid, &status, 0);
+		if (ptr->pid != UNSET)
+			ft_waitpid(ptr->pid, &status, 0);
 		ptr = ptr->next;
 	}
-	minishell->status = WEXITSTATUS(status);
+	if (ptr->pid != UNSET)
+	{
+		ft_waitpid(ptr->pid, &status, 0);
+		minishell->status = WEXITSTATUS(status);
+	}
 }
 
 int main(int argc, char *argv[], char *envp[])
@@ -44,7 +47,7 @@ int main(int argc, char *argv[], char *envp[])
 	minishell = init_struct(envp);
 	if (!minishell)
 		return (ERROR);
-	password();
+	// password();
 	while (minishell->exit == false) // wanneer wordt deze op true gezet?
 	{
 		signals(); // signals??
@@ -56,8 +59,8 @@ int main(int argc, char *argv[], char *envp[])
 			add_history(minishell->line);
 			minishell->cmds = parse(minishell);
 			executor(minishell);
+			wait_for_child(minishell);
 		}
-		wait_for_child(minishell);
 		// printf("[MAIN] minishell->cmds->cmd: %s\n", minishell->cmds->cmd);
 		// clean_shell(minishell);
 	}

@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 19:23:53 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/17 02:26:18 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 #define CHILD 0
 #define OLD_STATUS -2 // beter andere naam geven want dit betekent voor meerdere cases dat de huidige exit status geruikt moet worden
 #define NON_NUMERIC -3
+#define UNSET -4
 
 typedef enum e_word
 {
@@ -113,8 +114,9 @@ typedef struct s_cmds
 	// ohjee ?? executor
 	bool			builtin;
 	bool			absolute;
-	struct s_redir	*in;
-	struct s_redir	*out;
+	// struct s_redir	*in;
+	// struct s_redir	*out;
+	struct s_redir	*redir;
 	struct s_cmds	*next;
 	struct s_cmds	*prev;
 }				t_cmds;
@@ -191,7 +193,7 @@ void	exec_pipe(t_cmds *cmds, t_exec *exec, t_minishell *minishell);
 void	exec_command(t_cmds *cmd, t_minishell *minishell);
 void	exec_builtin(t_cmds *cmd, t_minishell *minishell);
 // static t_builtin	builtin_lookup(char *cmd);
-void	redirect(t_cmds *cmd);
+int	redirect(t_cmds *cmd);
 char	**env_to_envp(t_env *env);
 char	*get_path(char *cmd, t_env *env);
 int	get_fd_out(t_cmds *cmd);
@@ -254,7 +256,7 @@ void	free_node(t_cmds *node);
 void	free_redir(t_redir *redir);
 void	free_args(char **args);
 void	free_list(t_tokens *list);
-void	fatal(char *str);
+void	fatal(char *str, char *pstr);
 void	non_fatal(char *str, char *pstr);
 void	free_all(t_minishell *mini);
 
@@ -265,6 +267,7 @@ pid_t	ft_fork(void);
 void	ft_pipe(int *p);
 pid_t	ft_waitpid(pid_t pid, int *status, int option);
 int	ft_dup2(int fd1, int fd2);
+int	ft_execve(char *path, char **argv, char **envp);
 
 
 /* SIGNALS */

@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:49 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 19:20:35 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/17 02:38:09 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (s1[i] - s2[i]);
 }
 
-int	get_fd_out(t_cmds *cmd)
+int	get_fd_out(t_cmds *cmd) // waarom en waar gebruik ik deze functie allemaal? hz niet gewoon de fd_out gebruiken?
 {
-	if (cmd->fd_out == ERROR)
+	if (cmd->fd_out == ERROR) // waarom is dit logisch?
 		return (ERROR);
-	if (cmd->fd_out == 1)
+	if (cmd->fd_out == 1) // waarom is dit logisch?
 		return (STDOUT_FILENO);
 	else
-		return (cmd->fd_out);
+		return (cmd->fd_out); // waarom niet alleen deze?
 }
 
 char	*get_path(char *cmd, t_env *env)
@@ -98,24 +98,25 @@ char	**env_to_envp(t_env *env)
 }
 
 // errors checken
-void	redirect(t_cmds *cmd)
+int	redirect(t_cmds *cmd)
 {
-	if (cmd->fd_in == ERROR)
-		return ;
-	if (cmd->fd_out == ERROR)
-		return ;
-	if (cmd->fd_in > 0)
+	if (cmd->fd_in == ERROR || cmd->fd_out == ERROR)
+		return (FAILURE);
+	if (cmd->fd_in > STDIN_FILENO)
 	{
-		dup2(cmd->fd_in, STDIN_FILENO);
-		close(cmd->fd_in);
-		cmd->fd_in = STDIN_FILENO;
+		if (ft_dup2(cmd->fd_in, STDIN_FILENO) == ERROR)
+			return (FAILURE);
+		ft_close(cmd->fd_in);
+		// cmd->fd_in = STDIN_FILENO; // ? niet per se nodig blijkt
 	}
-	if (cmd->fd_out > 1)
+	if (cmd->fd_out > STDOUT_FILENO)
 	{
-		dup2(cmd->fd_out, STDOUT_FILENO);
-		close(cmd->fd_out);
-		cmd->fd_out = STDOUT_FILENO;
+		if (ft_dup2(cmd->fd_out, STDOUT_FILENO) == ERROR)
+			return (FAILURE);
+		ft_close(cmd->fd_out);
+		// cmd->fd_out = STDOUT_FILENO; // dit slaat nergens op want ik gebruik de fd_out niet meer
 	}
+	return (SUCCESS);
 }
 
 static t_builtin	builtin_lookup(char *cmd)
@@ -144,11 +145,17 @@ void	exec_builtin(t_cmds *cmd, t_minishell *minishell)
 	t_builtin	builtin;
 
 	builtin = builtin_lookup(cmd->cmd);
-	if (!builtin.func)
-		return ;
+	// if (!builtin.func)
+	// 	return ;
 	builtin.func(cmd, minishell);
 }
 
+void	exec_error_message(char *cmd, char *error)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(error, STDERR_FILENO);
+}
 // errors checken en kijken of hier geen functie voor is
 // exit code, child exit na non builtin + error message bij beide errors
 void	exec_command(t_cmds *cmd, t_minishell *minishell)
@@ -157,54 +164,75 @@ void	exec_command(t_cmds *cmd, t_minishell *minishell)
 	char	**envp;
 
 	envp = env_to_envp(minishell->env);
+	// if (cmd->absolute)
+	// {
+	// 	printf("absolute path: %s\n", cmd->cmd);
+	// 	if (access(cmd->cmd, X_OK) == ERROR)
+	// 	{
+	// 		free(envp);
+	// 		exec_error_message(cmd->cmd);
+	// 		// ft_putstr_fd("minishell: ", STDERR_FILENO);
+	// 		// ft_putstr_fd(cmd->cmd, STDERR_FILENO);
+	// 		// ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+	// 		exit(E_NO_SUCH_FILE_OR_DIRECTORY);
+	// 	}
+	// 	execve(cmd->cmd, cmd->args, envp);
+	// }
 	if (cmd->absolute)
-	{
-		if (access(cmd->cmd, X_OK) == ERROR)
-		{
-			free(envp);
-			write(2, "minishell: ", 11);
-			write(2, cmd->cmd, ft_strlen(cmd->cmd));
-			write(2, ": No such file or directory\n", 29);
-			exit(E_NO_SUCH_FILE_OR_DIRECTORY);
-		}
-		execve(cmd->cmd, cmd->args, envp);
-	}
+		path = ft_strdup(cmd->cmd);
 	else
-	{
 		path = get_path(cmd->cmd, minishell->env);
-		if (!path)
-		{
-			free(envp);
-			write(2, "minishell: ", 11);
-			write(2, cmd->cmd, ft_strlen(cmd->cmd));
-			write(2, ": No such file or directory\n", 29);
-			exit(E_NO_SUCH_FILE_OR_DIRECTORY);
-		}
-		execve(path, cmd->args, envp);
+	if (!path)
+	{
+		free(envp);
+		exec_error_message(cmd->cmd, ": command not found\n");
+		exit(E_COMMAND_NOT_FOUND);
 	}
+	if (access(path, X_OK) == ERROR)
+	{
+		free(envp);
+		exec_error_message(cmd->cmd, ": No such file or directory\n");
+		exit(E_NO_SUCH_FILE_OR_DIRECTORY);
+	}
+	// printf("path: %s | cmd: %s\n", path, cmd->cmd);
+	ft_execve(path, cmd->args, envp);
 }
+	// else
+	// {
+	// 	path = get_path(cmd->cmd, minishell->env);
+	// 	printf("path: %s\n", path);
+	// 	if (!path)
+	// 	{
+	// 		printf("path not found\n");
+	// 		free(envp);
+	// 		exec_error_message(cmd->cmd);
+	// 		// ft_putstr_fd("minishell: ", STDERR_FILENO);
+	// 		// ft_putstr_fd(cmd->cmd, STDERR_FILENO);
+	// 		// ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+	// 		exit(E_NO_SUCH_FILE_OR_DIRECTORY);
+	// 	}
+	// 	execve(path, cmd->args, envp);
+	// }
+// }
 
-// error message bij return als pipe errort en pid errort
 void	exec_pipe(t_cmds *cmds, t_exec *exec, t_minishell *minishell)
 {
-	if (pipe(exec->pipe) == ERROR)
-		return ;
-	exec->pid = fork();
-	if (exec->pid == ERROR)
-		return ;
+	ft_pipe(exec->pipe);
+	exec->pid = ft_fork();
 	cmds->pid = exec->pid;
 	if (exec->pid == CHILD)
 	{
 		if (exec->prev_read)
 		{
-			dup2(exec->prev_read, STDIN_FILENO);
-			close(exec->prev_read);
+			ft_dup2(exec->prev_read, STDIN_FILENO);
+			ft_close(exec->prev_read);
 		}
 		if (cmds->next)
-			dup2(exec->pipe[WRITE_END], STDOUT_FILENO);
-		close(exec->pipe[READ_END]);
-		close(exec->pipe[WRITE_END]);
-		redirect(cmds);
+			ft_dup2(exec->pipe[WRITE_END], STDOUT_FILENO);
+		ft_close(exec->pipe[READ_END]);
+		ft_close(exec->pipe[WRITE_END]);
+		if (redirect(cmds) == FAILURE)
+			exit(E_FAILURE);
 		if (cmds->builtin)
 		{
 			exec_builtin(cmds, minishell);
@@ -222,12 +250,11 @@ void	exec_simple(t_cmds *cmd, t_minishell *minishell)
 		exec_builtin(cmd, minishell);
 	else
 	{
-		minishell->cmds->pid = fork();
-		if (minishell->cmds->pid == ERROR)
-			return ;
+		minishell->cmds->pid = ft_fork();
 		if (minishell->cmds->pid == CHILD)
 		{
-			redirect(cmd);
+			if (redirect(cmd) == FAILURE)
+				exit(E_FAILURE);
 			exec_command(cmd, minishell);
 		}
 	}
@@ -252,18 +279,19 @@ void	executor(t_minishell *minishell)
 	t_cmds	*tmp;
 
 	tmp = minishell->cmds;
+	exec.prev_read = 0;
 	if (tmp->next)
 	{
 		while (tmp)
 		{
 			exec_pipe(tmp, &exec, minishell);
 			if (exec.prev_read)
-				close(exec.prev_read);
+				ft_close(exec.prev_read);
 			exec.prev_read = exec.pipe[READ_END];
-			close(exec.pipe[WRITE_END]);
+			ft_close(exec.pipe[WRITE_END]);
 			tmp = tmp->next;
 		}
-		close(exec.pipe[READ_END]);
+		ft_close(exec.pipe[READ_END]);
 	}
 	else
 		exec_simple(tmp, minishell);

@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 16:48:42 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/16 18:41:04 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/17 01:17:42 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void *ft_malloc(size_t size)
 	ptr = malloc(size);
 	if (!ptr)
 	{
-		fatal("malloc ");
+		fatal("malloc", NULL);
 		return (NULL);
 	}
 	return (ptr);
@@ -27,12 +27,13 @@ void *ft_malloc(size_t size)
 
 int ft_close(int fd)
 {
-	if (close(fd) == -1)
+	// printf("fd: %d\n", fd);
+	if (close(fd) == ERROR)
 	{
-		fatal("close ");
-		return (-1);
+		fatal("close", NULL);
+		return (ERROR);
 	}
-	return (0);
+	return (SUCCESS);
 }
 
 int ft_open(char *file, int flag, int mode)
@@ -40,10 +41,7 @@ int ft_open(char *file, int flag, int mode)
 	int fd;
 
 	fd = open(file, flag, mode);
-	if (fd == -1)
-	{
-		non_fatal("open ", NULL);
-		return (-1);
-	}
+	if (fd == ERROR)
+		non_fatal(file, NULL);
 	return (fd);
 }

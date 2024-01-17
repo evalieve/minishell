@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/16 19:28:33 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/17 02:30:02 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,16 +129,16 @@ t_cmds *ft_nodenew(void)
 	new = (t_cmds *)ft_malloc(1 *sizeof(t_cmds));
 	new->cmd = NULL;
 	// new->path = NULL;
-	new->fd_in = 0;
-	new->fd_out = 1;
+	new->fd_in = STDIN_FILENO;
+	new->fd_out = STDOUT_FILENO;
 	new->args = NULL;
 	new->next = NULL;
 	new->prev = NULL;
 	new->builtin = false;
 	new->absolute = false;
-	new->in = NULL;
-	new->out = NULL;
-	new->pid = 0;
+	// new->in = NULL;
+	// new->out = NULL;
+	new->pid = UNSET;
 	return (new);
 }
 
@@ -492,11 +492,11 @@ t_cmds *makenodes(t_tokens *tokens)
 			else if (tokens->word == FIL || tokens->word == LIM)
 			{
 				if (tokens->prev->type == RDOUT || tokens->prev->type == RDAPPND)
-					list->out = ft_rediradd(list->out, ft_redirnew(tokens->value, tokens->prev->type));
+					list->redir = ft_rediradd(list->redir, ft_redirnew(tokens->value, tokens->prev->type));
 				else if (tokens->prev->type == RDHDOC || tokens->prev->type == RDIN)
-					list->in = ft_rediradd(list->in, ft_redirnew(tokens->value, tokens->prev->type));
+					list->redir = ft_rediradd(list->redir, ft_redirnew(tokens->value, tokens->prev->type));
 				else
-					list->out = ft_rediradd(list->out, ft_redirnew(tokens->value, RDOUT));
+					list->redir = ft_rediradd(list->redir, ft_redirnew(tokens->value, RDOUT));
 			}
 			tokens = tokens->next;
 		}
