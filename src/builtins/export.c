@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:36 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 19:13:25 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/17 03:39:51 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,13 +214,21 @@ void	builtin_export(t_cmds *cmd, t_minishell *minishell)
 	i = 1;
 	// printf("builtin export\n");
 	minishell->status = E_SUCCESS;
-	if (!cmd->args[1]) // export printen
+	// printf("cmd->args[1]: '%s'\n", cmd->args[1]);
+	while (cmd->args[i] && ft_strcmp(cmd->args[i], "") == SUCCESS) // omdat er een lege string kan zijn
+		i++;
+	if (!cmd->args[i]) // export printen
 		print_export(minishell, get_fd_out(cmd));
 	else
 	{
 		while (cmd->args[i])
 		{
 			// get key kan niet
+			if (ft_strcmp(cmd->args[i], "") == SUCCESS)
+			{
+				i++;
+				continue ;
+			}
 			equal_sign = equal_sign_exist(cmd->args[i]);
 			if (!validate_key(cmd->args[i])) // error function? // herloop
 			{

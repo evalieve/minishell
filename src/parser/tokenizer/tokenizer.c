@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/17 02:30:02 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/17 02:57:47 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -574,6 +574,11 @@ t_cmds	*parse(t_minishell *minishell)
 	t_tokens *list;
 	char *line;
 
+	// spaties en tabs skippen aan het begin!!!!
+	while (minishell->line && (*minishell->line == ' ' || *minishell->line == '\t' || *minishell->line == '\n'))
+		minishell->line++;
+	if (minishell->line == NULL || *minishell->line == '\0')
+		return (NULL);
 	line = minishell->line;
 	list = quotes(line);
 	if (list == NULL)

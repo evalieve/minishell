@@ -58,6 +58,8 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			add_history(minishell->line);
 			minishell->cmds = parse(minishell);
+			if (!minishell->cmds)
+				continue ;
 			executor(minishell);
 			wait_for_child(minishell);
 		}

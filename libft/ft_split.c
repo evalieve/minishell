@@ -6,7 +6,7 @@
 /*   By: evan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/01/13 09:35:22 by evan-der      #+#    #+#                 */
-/*   Updated: 2024/01/16 19:12:19 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/17 03:10:08 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	**ft_split(char const *s, char c)
 	int		start;
 
 	if (!s)
-		return (0);
+		return (NULL);
 	words = ft_words(s, c);
 	str = (char **)ft_malloc((words + 1) * sizeof(char *));
 	str[words] = 0;

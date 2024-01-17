@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:49 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/17 02:38:09 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/17 03:13:11 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ char	*get_path(char *cmd, t_env *env)
 		}
 		ptr = ptr->next;
 	}
+	if (!path)
+		return (NULL);
 	paths = ft_split(path, ':');
 	free(path);
 	while (paths[i])
