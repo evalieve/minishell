@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/21 13:55:31 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/25 15:21:07 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/25 16:51:57 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*heredoc_loop(char *line, t_cmds *node)
 	while (1)
 	{
 		line = readline("heredoc> ");
-		if (line && ft_strncmp(line, node->redir->file, ft_strlen(line)) != 0)
+		if (line && ft_strcmp(line, node->redir->file) != 0)
 		{
 			ft_putstr_fd(line, node->pipe[1]);
 			ft_putchar_fd('\n', node->pipe[1]);

@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/25 16:07:06 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/25 16:51:32 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -446,18 +446,10 @@ t_tokens *idtokens(t_tokens *list, t_minishell *minishell)
 			node->type = WORD;
 		node = node->next;
 	}
-	printlist(list);
 	list = expand(list, minishell);
-	write(1, "\nafter expand\n", 14);
-	printlist(list);
 	combine_words(list);
-	write(1, "\nafter combine\n", 15);
 	remove_white(list);
-	write(1, "\nafter remove white\n", 20);
-	printlist(list);
 	list = idword(list);
-	write(1, "\nafter idword\n", 14);
-	printlist(list);
 	return (list);
 }
 
