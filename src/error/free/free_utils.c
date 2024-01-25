@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:57:32 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/15 16:12:37 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/25 15:10:20 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,8 @@ void	free_node(t_cmds *node)
 			free(tmp->cmd);
 		if (tmp->args)
 			free_args(tmp->args);
-		if (tmp->in)
-			free_redir(tmp->in);
-		if (tmp->out)	
-			free_redir(tmp->out);
+		if (tmp->redir)
+			free_redir(tmp->redir);
 		free(tmp);
 	//fd closen???
 	}

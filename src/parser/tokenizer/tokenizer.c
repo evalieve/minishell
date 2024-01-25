@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/15 18:45:48 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/25 16:07:06 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,7 @@ t_cmds *ft_nodenew(void)
 	new->prev = NULL;
 	new->builtin = false;
 	new->absolute = false;
-	new->in = NULL;
-	new->out = NULL;
+	new->redir = NULL;
 	new->pid = 0;
 	return (new);
 }
@@ -403,7 +402,8 @@ t_tokens *mergetokens(t_tokens *list)
 			node->value = ft_strdup(" ");
 			if (iswhspace(node->next->value) == 0 && node->next->quote == 0)
 				ft_lstremove(node->next);
-			node = node->next;
+			if (node->next && iswhspace(node->next->value) != 0)
+				node = node->next;
 		}
 		else
 			node = node->next;
@@ -411,7 +411,7 @@ t_tokens *mergetokens(t_tokens *list)
 	return (list);
 }
 
-t_tokens *idtokens(t_tokens *list)
+t_tokens *idtokens(t_tokens *list, t_minishell *minishell)
 {
 	t_tokens *node;
 
@@ -446,9 +446,18 @@ t_tokens *idtokens(t_tokens *list)
 			node->type = WORD;
 		node = node->next;
 	}
+	printlist(list);
+	list = expand(list, minishell);
+	write(1, "\nafter expand\n", 14);
+	printlist(list);
 	combine_words(list);
+	write(1, "\nafter combine\n", 15);
 	remove_white(list);
+	write(1, "\nafter remove white\n", 20);
+	printlist(list);
 	list = idword(list);
+	write(1, "\nafter idword\n", 14);
+	printlist(list);
 	return (list);
 }
 
@@ -500,11 +509,11 @@ t_cmds *makenodes(t_tokens *tokens)
 			else if (tokens->word == FIL || tokens->word == LIM)
 			{
 				if (tokens->prev->type == RDOUT || tokens->prev->type == RDAPPND)
-					list->out = ft_rediradd(list->out, ft_redirnew(tokens->value, tokens->prev->type));
+					list->redir = ft_rediradd(list->redir, ft_redirnew(tokens->value, tokens->prev->type));
 				else if (tokens->prev->type == RDHDOC || tokens->prev->type == RDIN)
-					list->in = ft_rediradd(list->in, ft_redirnew(tokens->value, tokens->prev->type));
+					list->redir = ft_rediradd(list->redir, ft_redirnew(tokens->value, tokens->prev->type));
 				else
-					list->out = ft_rediradd(list->out, ft_redirnew(tokens->value, RDOUT));
+					list->redir = ft_rediradd(list->redir, ft_redirnew(tokens->value, RDOUT));
 			}
 			tokens = tokens->next;
 		}
@@ -605,13 +614,12 @@ t_cmds	*parse(t_minishell *minishell)
 			break ;
 	}
 	list = mergetokens(ft_lstfirst(list));
-	list = idtokens(list);
+	list = idtokens(list, minishell);
 	if (check_syntax(list, minishell) == 1)
 	{
 		minishell->status = E_SYNTAX_ERROR;
 		return (NULL);
 	}
-	list = expand(list, minishell);
 	minishell->cmds = makenodes(list);
 	free_list(list);
 	return (minishell->cmds);
