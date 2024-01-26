@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:45 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:39:39 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/26 19:20:37 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	builtin_unset(t_cmds *cmd, t_minishell *minishell)
 	{
 		if (key_exist(minishell->env, cmd->args[i]))
 			key_unset(minishell, cmd->args[i]);
-		if (ft_strcmp(cmd->args[i], "PWD") == SUCCESS)
+		if (ft_strcmp(cmd->args[i], "PWD") == SUCCESS) // dit klopt gewoon niet??
 		{
 			free(minishell->pwd);
 			minishell->pwd = NULL;
