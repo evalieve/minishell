@@ -213,7 +213,7 @@ t_tokens *idword(t_tokens *tokens);
 void    remove_white(t_tokens *head);
 t_cmds *makenodes(t_tokens *tokens);
 char **ft_addargs(t_tokens *tokens);
-t_tokens *idtokens(t_tokens *list);
+t_tokens *idtokens(t_tokens *list, t_minishell *minishell);
 t_tokens *mergetokens(t_tokens *list);
 int	compvalue(t_tokens *list, t_tokens *next);
 void    combine_words(t_tokens *head);
@@ -240,8 +240,10 @@ bool	iswhspace(char *str);
 /* REDIRECTIONS */
 char	*heredoc_loop(char *line, t_cmds *node);
 void	handle_redir(t_cmds *node);
-void	handle_red_out(t_cmds *node);
-void	handle_red_in(t_cmds *node);
+//void	handle_red_out(t_cmds *node);
+void	handle_red_out1(t_cmds *node, t_redir *redir);
+//void	handle_red_in(t_cmds *node);
+void	handle_red_in1(t_cmds *node, t_redir *redir);
 
 /* EXPANDER */
 

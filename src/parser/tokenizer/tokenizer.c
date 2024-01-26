@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/17 02:57:47 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/25 16:51:32 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,9 +136,8 @@ t_cmds *ft_nodenew(void)
 	new->prev = NULL;
 	new->builtin = false;
 	new->absolute = false;
-	// new->in = NULL;
-	// new->out = NULL;
 	new->pid = UNSET;
+	new->redir = NULL;
 	return (new);
 }
 
@@ -395,7 +394,8 @@ t_tokens *mergetokens(t_tokens *list)
 			node->value = ft_strdup(" ");
 			if (iswhspace(node->next->value) == 0 && node->next->quote == 0)
 				ft_lstremove(node->next);
-			node = node->next;
+			if (node->next && iswhspace(node->next->value) != 0)
+				node = node->next;
 		}
 		else
 			node = node->next;
@@ -403,7 +403,7 @@ t_tokens *mergetokens(t_tokens *list)
 	return (list);
 }
 
-t_tokens *idtokens(t_tokens *list)
+t_tokens *idtokens(t_tokens *list, t_minishell *minishell)
 {
 	t_tokens *node;
 
@@ -438,6 +438,7 @@ t_tokens *idtokens(t_tokens *list)
 			node->type = WORD;
 		node = node->next;
 	}
+	list = expand(list, minishell);
 	combine_words(list);
 	remove_white(list);
 	list = idword(list);
@@ -602,13 +603,12 @@ t_cmds	*parse(t_minishell *minishell)
 			break ;
 	}
 	list = mergetokens(ft_lstfirst(list));
-	list = idtokens(list);
+	list = idtokens(list, minishell);
 	if (check_syntax(list, minishell) == 1)
 	{
 		minishell->status = E_SYNTAX_ERROR;
 		return (NULL);
 	}
-	list = expand(list, minishell);
 	minishell->cmds = makenodes(list);
 	free_list(list);
 	return (minishell->cmds);
