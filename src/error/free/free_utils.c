@@ -73,6 +73,8 @@ void	free_node(t_cmds *node)
 			free_args(tmp->args);
 		if (tmp->redir)
 			free_redir(tmp->redir);
+		// if (tmp->out)	
+			// free_redir(tmp->out);
 		free(tmp);
 	//fd closen???
 	}

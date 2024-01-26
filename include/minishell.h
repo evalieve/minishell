@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/25 15:22:45 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/25 16:26:36 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,14 @@
 #define CHILD 0
 #define OLD_STATUS -2 // beter andere naam geven want dit betekent voor meerdere cases dat de huidige exit status geruikt moet worden
 #define NON_NUMERIC -3
+#define UNSET -4
+
+typedef enum e_signal
+{
+	S_PARENT,
+	S_CHILD,
+	S_HEREDOC,
+}			t_signal;
 
 typedef enum e_word
 {
@@ -64,8 +72,8 @@ typedef enum e_status
 	E_COMMAND_NOT_FOUND = 127,
 	E_NO_SUCH_FILE_OR_DIRECTORY = 127,
 	E_INVALID_ARGUMENT = 128,
-	E_CTRL_C = 130,
-	E_CTRL_BACKSLASH = 131,
+	E_SIGINT = 130,
+	E_SIGQUIT = 131,
 	E_UNKNOWN = 255,
 	E_SYNTAX_ERROR = 258,
 	// status nums -> als status -42 is dan error minishell en exit-> -1
@@ -113,6 +121,8 @@ typedef struct s_cmds
 	// ohjee ?? executor
 	bool			builtin;
 	bool			absolute;
+	// struct s_redir	*in;
+	// struct s_redir	*out;
 	struct s_redir	*redir;
 	struct s_cmds	*next;
 	struct s_cmds	*prev;
@@ -190,7 +200,7 @@ void	exec_pipe(t_cmds *cmds, t_exec *exec, t_minishell *minishell);
 void	exec_command(t_cmds *cmd, t_minishell *minishell);
 void	exec_builtin(t_cmds *cmd, t_minishell *minishell);
 // static t_builtin	builtin_lookup(char *cmd);
-void	redirect(t_cmds *cmd);
+int	redirect(t_cmds *cmd);
 char	**env_to_envp(t_env *env);
 char	*get_path(char *cmd, t_env *env);
 int	get_fd_out(t_cmds *cmd);
@@ -222,10 +232,10 @@ t_tokens	*ft_lstnew_token(char *content, int quote);
 t_cmds *ft_nodenew(void);
 void *ft_malloc(size_t size);
 char	*ft_strchr_delim(const char *s);
-int	is_delim(char c);
+bool	is_delim(char c);
 void printlist(t_tokens *list);
 int	ft_memcmp(const void *str1, const void *str2, size_t n);
-int	iswhspace(char *str);
+bool	iswhspace(char *str);
 
 /* REDIRECTIONS */
 char	*heredoc_loop(char *line, t_cmds *node);
@@ -242,7 +252,7 @@ char	*ft_expand(char *line, t_minishell *mini);
 char	*expand_exit(char *line, t_minishell *mini, int i);
 char	*expand_var(char *line, t_minishell *mini, int i);
 
-int	check_lim(t_tokens *node);
+bool	check_lim(t_tokens *node);
 char *ft_replace(char *line, char *var, char *value, int start);
 char *check_var(char *line);
 char *find_var(char *var, t_env *env);
@@ -255,9 +265,10 @@ void	free_node(t_cmds *node);
 void	free_redir(t_redir *redir);
 void	free_args(char **args);
 void	free_list(t_tokens *list);
-void	fatal(char *str);
+void	fatal(char *str, char *pstr);
 void	non_fatal(char *str, char *pstr);
 void	free_all(t_minishell *mini);
+void	error_message(char *cmd, char *arg, char *message);
 
 void *ft_malloc(size_t size);
 int ft_close(int fd);
@@ -266,11 +277,29 @@ pid_t	ft_fork(void);
 void	ft_pipe(int *p);
 pid_t	ft_waitpid(pid_t pid, int *status, int option);
 int	ft_dup2(int fd1, int fd2);
+int	ft_execve(char *path, char **argv, char **envp);
 
 
 /* SIGNALS */
-void signals(void);
-void signal_ctrl_c(int signum);
+void signals(t_signal sig);
 void signal_ctrl_d(void);
+
+
+/* UTILS??? */
+void	check_for_pwd_and_oldpwd(t_minishell *minishell, char *arg, bool equal_sign);
+void	set_working_dir(t_minishell *minishell, char *arg_key, char *arg);
+void	adopt_wd_value_from_struct(t_minishell *minishell, char *arg_key);
+void	print_env_line(t_env *env, int fd);
+void	print_env(t_minishell *minishell, int fd);
+void	print_export(t_minishell *minishell, int fd);
+void	key_encounter_unset(t_env *env, char *key);
+void	delete_from_env(t_minishell *minishell, t_env *key);
+void	add_to_env(t_env *env, char *arg, bool equal_sign);
+char	*get_value(char *arg);
+char	*get_key(char *arg);
+bool	equal_sign_exist(char *arg);
+bool	key_exist(t_env *env, char *arg);
+bool	validate_key(char *arg);
+void	change_value(t_env *env, char *arg);
 
 #endif

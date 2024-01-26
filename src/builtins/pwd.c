@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:40 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:39:42 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/25 15:12:05 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,11 @@ void	builtin_pwd(t_cmds *cmd, t_minishell *minishell)
 	if (!cwd)
 	{
 		minishell->status = E_FAILURE;
-		write(STDERR_FILENO, "minishell: pwd: ", 17);
-		perror(NULL);
+		non_fatal("pwd", NULL);
 	}
 	else
 	{
-		ft_putendl_fd(cwd, STDOUT_FILENO);
+		ft_putendl_fd(cwd, cmd->fd_out);
 		free(cwd);
 	}
 	minishell->status = E_SUCCESS;

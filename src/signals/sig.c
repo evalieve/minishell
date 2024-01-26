@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:50 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:27:40 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/22 11:56:30 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,52 @@ void signal_ctrl_d(void)
 	exit(0);
 }
 
-void signal_ctrl_c(int signum)
+void	signal_heredoc(int signum)
 {
-	(void) signum;
-   
-	write(1, "\n", 1);
-	// ioctl(STDIN_FILENO, TIOCSTI, "\n");
-	rl_replace_line("", 0);
-	// rl_red
-	rl_on_new_line();
-	rl_redisplay();
-	// signal(SIGQUIT, SIG_IGN) ??
+	if (signum == SIGINT)
+	{
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		exit(E_SIGINT);
+	}
 }
 
-void signals(void)
+// bij sigquit: exit status 131 - hoe kan ik dit (met waitpid, thanks copilot?) opvangen?
+void	signal_child(int signum)
 {
-	signal(SIGINT, &signal_ctrl_c);
-	signal(SIGQUIT, SIG_IGN); // ignore ctrl "\"
+	if (signum == SIGINT)
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	// else if (signum == SIGQUIT)
+	// 	signal(SIGQUIT, SIG_IGN);
+	else if (signum == SIGQUIT)
+		ft_putstr_fd("Quit\n", STDOUT_FILENO);
+}
+
+void signal_parent(int signum) // dubbele prompt
+{
+   if (signum == SIGINT)
+   {
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+   }
+}
+
+void signals(t_signal sig)
+{
+	if (sig == S_PARENT)
+	{
+		signal(SIGINT, &signal_parent);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else if (sig == S_CHILD)
+	{
+		signal(SIGINT, signal_child);
+		signal(SIGQUIT, signal_child);
+	}
+	else if (sig == S_HEREDOC)
+	{
+		signal(SIGINT, signal_heredoc);
+		signal(SIGQUIT, SIG_IGN);
+	}
 }

@@ -129,15 +129,15 @@ t_cmds *ft_nodenew(void)
 	new = (t_cmds *)ft_malloc(1 *sizeof(t_cmds));
 	new->cmd = NULL;
 	// new->path = NULL;
-	new->fd_in = 0;
-	new->fd_out = 1;
+	new->fd_in = STDIN_FILENO;
+	new->fd_out = STDOUT_FILENO;
 	new->args = NULL;
 	new->next = NULL;
 	new->prev = NULL;
 	new->builtin = false;
 	new->absolute = false;
+	new->pid = UNSET;
 	new->redir = NULL;
-	new->pid = 0;
 	return (new);
 }
 
@@ -575,6 +575,11 @@ t_cmds	*parse(t_minishell *minishell)
 	t_tokens *list;
 	char *line;
 
+	// spaties en tabs skippen aan het begin!!!!
+	while (minishell->line && (*minishell->line == ' ' || *minishell->line == '\t' || *minishell->line == '\n'))
+		minishell->line++;
+	if (minishell->line == NULL || *minishell->line == '\0')
+		return (NULL);
 	line = minishell->line;
 	list = quotes(line);
 	if (list == NULL)

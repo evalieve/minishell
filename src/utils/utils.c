@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_calloc.c                                        :+:    :+:            */
+/*   utils.c                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: evan-der <marvin@codam.nl>                   +#+                     */
+/*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/11/29 11:54:44 by evan-der      #+#    #+#                 */
-/*   Updated: 2024/01/16 22:26:20 by evalieve      ########   odam.nl         */
+/*   Created: 2024/01/22 12:07:41 by evalieve      #+#    #+#                 */
+/*   Updated: 2024/01/25 17:04:16 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <minishell.h>
 
-void	*ft_calloc(size_t count, size_t size)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	void	*ptr;
+	int	i;
 
-	ptr = (void *)ft_malloc(size * count);
-	ft_bzero(ptr, size * count);
-	return (ptr);
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }

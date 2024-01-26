@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:33 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:39:44 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/25 15:11:53 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	builtin_env(t_cmds *cmd, t_minishell *minishell)
 	int		fd;
 
 	ptr = minishell->env;
-	fd = get_fd_out(cmd);
+	fd = cmd->fd_out;
 	while (ptr)
 	{
 		if (ptr->key && ptr->equal_sign)
