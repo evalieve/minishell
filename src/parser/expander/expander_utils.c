@@ -6,21 +6,21 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:24:04 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/25 15:56:48 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/26 15:15:14 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	check_lim(t_tokens *node)
+bool	check_lim(t_tokens *node)
 {
 	if ((node->prev && node->prev->type == RDHDOC )||(node->prev && node->prev->prev && node->prev->type == WHITE && node->prev->prev->type == RDHDOC))
 	{
 		ft_putstr_fd("wtf komen we hier?\n", 1);	
-		return (1);
+		return (true);
 	}
 	else
-		return (0);
+		return (false);
 }
 
 char	*check_var(char *line)

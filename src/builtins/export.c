@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:36 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/26 14:51:29 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/26 15:13:45 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	print_export(t_minishell *minishell, int fd)
 	minishell->status = E_SUCCESS;
 }
 
-bool	validate_identifier_export(char *arg, int fd)
+bool	validate_identifier_export(char *arg)
 {
 	if (validate_key(arg))
 		return (true);
@@ -102,7 +102,7 @@ void	builtin_export(t_cmds *cmd, t_minishell *minishell)
 			i++;
 			continue ;
 		}
-		else if (!validate_identifier_export(cmd->args[i], cmd->fd_out))
+		else if (!validate_identifier_export(cmd->args[i]))
 			minishell->status = E_FAILURE;
 		else if (key_exist(minishell->env, cmd->args[i]) && equal_sign_exist(cmd->args[i]))
 		{

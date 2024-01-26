@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/25 16:51:32 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/26 15:14:47 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,17 @@ bool ft_isabsolute(char *command)
 
 void    remove_white(t_tokens *head);
 
-int	iswhspace(char *str)
+bool	iswhspace(char *str)
 {
 	if (!str)
-		return (1);
+		return (true);
 	while(*str)
 	{
 		if (*str != ' ' && *str != '\t' && *str != '\n')
 			return (1);
 		str++;
 	}
-	return (0);
+	return (false);
 }
 
 int	ft_memcmp(const void *str1, const void *str2, size_t n)
@@ -97,13 +97,13 @@ void printlist(t_tokens *list)
 	}
 }
 
-int	is_delim(char c)
+bool	is_delim(char c)
 {
 	if (c == '|' || c == '>' || c == '<' || \
 	c == ' ' || c == '\t' || c == '\n')
-		return (1);
+		return (true);
 	else
-		return (0);
+		return (false);
 }
 
 char	*ft_strchr_delim(const char *s)
