@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:53:31 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/17 01:28:09 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/26 18:55:37 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	ft_dup2(int fd1, int fd2)
 	if (fd1 == ERROR || fd2 == ERROR)
 		return (ERROR);
 	if (dup2(fd1, fd2) == ERROR)
-			fatal("dup2", NULL);
+		fatal("dup2", NULL);
 	return (SUCCESS);
 }
 
@@ -53,6 +53,6 @@ int	ft_execve(char *path, char **argv, char **envp)
 
 	rv = execve(path, argv, envp);
 	if (rv == ERROR)
-		fatal(path, NULL); // exits child process
+		fatal(path, NULL);
 	return (rv);
 }

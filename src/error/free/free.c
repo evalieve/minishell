@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:55:46 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/15 16:12:49 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/26 18:57:51 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,3 @@ void	free_all(t_minishell *mini)
 	if (mini->env)
 		free_env(mini->env);
 }
-

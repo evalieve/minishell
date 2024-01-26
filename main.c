@@ -57,7 +57,7 @@ int main(int argc, char *argv[], char *envp[])
 		if (ft_strcmp(minishell->line, "") != SUCCESS)
 		{
 			add_history(minishell->line);
-			minishell->cmds = parse(minishell);
+			minishell->cmds = tokenize(minishell);
 			if (!minishell->cmds)
 				continue ;
 			executor(minishell);

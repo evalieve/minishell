@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:57:32 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/25 15:10:20 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/26 18:58:52 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_list(t_tokens *list)
 {
-	t_tokens *tmp;
+	t_tokens	*tmp;
 
 	tmp = NULL;
 	list = ft_lstfirst(list);
@@ -30,7 +30,7 @@ void	free_list(t_tokens *list)
 
 void	free_args(char **args)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (args[i])
@@ -43,7 +43,7 @@ void	free_args(char **args)
 
 void	free_redir(t_redir *redir)
 {
-	t_redir *tmp;
+	t_redir	*tmp;
 
 	tmp = NULL;
 	while (redir)
@@ -58,7 +58,7 @@ void	free_redir(t_redir *redir)
 
 void	free_node(t_cmds *node)
 {
-	t_cmds *tmp;
+	t_cmds	*tmp;
 
 	tmp = NULL;
 	while (node && node->prev)
@@ -73,16 +73,13 @@ void	free_node(t_cmds *node)
 			free_args(tmp->args);
 		if (tmp->redir)
 			free_redir(tmp->redir);
-		// if (tmp->out)	
-			// free_redir(tmp->out);
 		free(tmp);
-	//fd closen???
 	}
 }
 
 void	free_env(t_env *env)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	tmp = NULL;
 	while (env)

@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:24:04 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 15:15:14 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/26 19:02:30 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 bool	check_lim(t_tokens *node)
 {
-	if ((node->prev && node->prev->type == RDHDOC )||(node->prev && node->prev->prev && node->prev->type == WHITE && node->prev->prev->type == RDHDOC))
-	{
-		ft_putstr_fd("wtf komen we hier?\n", 1);	
+	if ((node->prev && node->prev->type == RDHDOC) || \
+	(node->prev && node->prev->prev && \
+	node->prev->type == WHITE && node->prev->prev->type == RDHDOC))
 		return (true);
-	}
 	else
 		return (false);
 }

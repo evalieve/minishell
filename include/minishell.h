@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/25 16:26:36 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/26 18:49:25 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,11 +207,11 @@ int	get_fd_out(t_cmds *cmd);
 int	ft_strcmp(const char *s1, const char *s2);
 
 /* TOKENIZER FILE */
-t_cmds	*parse(t_minishell *minishell);
+t_cmds	*tokenize(t_minishell *minishell);
 void printmini(t_minishell *mini);
 t_tokens *idword(t_tokens *tokens);
 void    remove_white(t_tokens *head);
-t_cmds *makenodes(t_tokens *tokens);
+t_cmds *parse(t_tokens *tokens);
 char **ft_addargs(t_tokens *tokens);
 t_tokens *idtokens(t_tokens *list, t_minishell *minishell);
 t_tokens *mergetokens(t_tokens *list);
@@ -236,6 +236,8 @@ bool	is_delim(char c);
 void printlist(t_tokens *list);
 int	ft_memcmp(const void *str1, const void *str2, size_t n);
 bool	iswhspace(char *str);
+bool ft_isabsolute(char *command);
+bool ft_checkbi(char *command);
 
 /* REDIRECTIONS */
 char	*heredoc_loop(char *line, t_cmds *node);

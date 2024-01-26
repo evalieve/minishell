@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:54:41 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/17 11:23:00 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/26 18:55:14 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	fatal(char *str, char *pstr)
 	ft_putstr_fd(str, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	perror(pstr);
-	exit(FAILURE); // exit status?
+	exit(FAILURE);
 }
 
 void	non_fatal(char *str, char *pstr)

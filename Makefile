@@ -15,6 +15,13 @@ SRCS =  src/builtins/cd.c		\
         src/executor/exec.c		\
         src/signals/sig.c		\
 		src/parser/tokenizer/tokenizer.c\
+		src/parser/tokenizer/id_tokens.c\
+		src/parser/tokenizer/nodes_redir_utils.c\
+		src/parser/tokenizer/parser.c \
+		src/parser/tokenizer/quotes.c \
+		src/parser/tokenizer/split_utils.c \
+		src/parser/tokenizer/tokens.c \
+		src/parser/tokenizer/value_check.c \
 		src/parser/redirections/redir.c \
 		src/parser/expander/expander.c \
 		src/parser/expander/expander_utils.c \

@@ -6,15 +6,15 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 16:48:42 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/25 16:58:32 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/26 18:59:47 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void *ft_malloc(size_t size)
+void	*ft_malloc(size_t size)
 {
-	void *ptr;
+	void	*ptr;
 
 	ptr = malloc(size);
 	if (!ptr)
@@ -25,9 +25,8 @@ void *ft_malloc(size_t size)
 	return (ptr);
 }
 
-int ft_close(int fd)
+int	ft_close(int fd)
 {
-	// printf("fd: %d\n", fd);
 	if (close(fd) == ERROR)
 	{
 		fatal("close", NULL);
@@ -36,9 +35,9 @@ int ft_close(int fd)
 	return (SUCCESS);
 }
 
-int ft_open(char *file, int flag, int mode)
+int	ft_open(char *file, int flag, int mode)
 {
-	int fd;
+	int	fd;
 
 	fd = open(file, flag, mode);
 	if (fd == ERROR)
