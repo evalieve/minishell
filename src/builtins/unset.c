@@ -6,12 +6,12 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:45 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/20 17:25:44 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 15:39:39 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-// #include "../include/minishell.h"
+// TODO EXIT STATUS
 
 void	delete_from_env(t_minishell *minishell, t_env *key)
 {
@@ -46,7 +46,6 @@ void	key_unset(t_minishell *minishell, char *arg)
 
 void	builtin_unset(t_cmds *cmd, t_minishell *minishell)
 {
-	// t_env	*ptr;
 	int		i;
 
 	i = 1;
@@ -54,8 +53,7 @@ void	builtin_unset(t_cmds *cmd, t_minishell *minishell)
 	{
 		if (key_exist(minishell->env, cmd->args[i]))
 			key_unset(minishell, cmd->args[i]);
-	// bij pwd en oldpwd moet ook in minishell->pwd en minishell->oldpwd de value worden verwijderd
-		if (ft_strcmp(cmd->args[i], "PWD") == SUCCESS) 
+		if (ft_strcmp(cmd->args[i], "PWD") == SUCCESS)
 		{
 			free(minishell->pwd);
 			minishell->pwd = NULL;
@@ -68,3 +66,5 @@ void	builtin_unset(t_cmds *cmd, t_minishell *minishell)
 		i++;
 	}
 }
+// bij pwd en oldpwd moet ook in minishell->pwd 
+// en minishell->oldpwd de value worden verwijderd

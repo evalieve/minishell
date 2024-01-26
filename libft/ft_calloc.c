@@ -6,7 +6,7 @@
 /*   By: evan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/29 11:54:44 by evan-der      #+#    #+#                 */
-/*   Updated: 2021/03/01 09:21:52 by evan-der      ########   odam.nl         */
+/*   Updated: 2024/01/16 18:49:08 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void	*ft_calloc(size_t count, size_t size)
 {
 	void	*ptr;
 
-	ptr = (void *)malloc(size * count);
-	if (!ptr)
-		return (0);
+	ptr = (void *)ft_malloc(size * count);
 	ft_bzero(ptr, size * count);
 	return (ptr);
 }

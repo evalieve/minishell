@@ -6,12 +6,11 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:36 by evalieve      #+#    #+#                 */
-/*   Updated: 2023/12/20 17:48:26 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/16 19:13:25 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-// #include "../../include/minishell.h"
 
 char	*get_key(char *arg)
 {
@@ -61,9 +60,7 @@ void	add_to_env(t_env *env, char *arg, bool equal_sign)
 	t_env	*new;
 
 	ptr = env;
-	new = malloc(sizeof(t_env));
-	if (!new)
-		return ; // error message function (TODO)
+	new = (t_env *)ft_malloc(sizeof(t_env));
 	new->key = get_key(arg);
 	new->equal_sign = equal_sign;
 	if (!new->equal_sign)
@@ -216,7 +213,7 @@ void	builtin_export(t_cmds *cmd, t_minishell *minishell)
 
 	i = 1;
 	// printf("builtin export\n");
-	minishell->status = 0;
+	minishell->status = E_SUCCESS;
 	if (!cmd->args[1]) // export printen
 		print_export(minishell, get_fd_out(cmd));
 	else
@@ -230,7 +227,7 @@ void	builtin_export(t_cmds *cmd, t_minishell *minishell)
 				write(STDERR_FILENO, "export: `", 10);	
 				write(STDERR_FILENO, cmd->args[i], strlen(cmd->args[i]));
 				write(STDERR_FILENO, "': not a valid identifier\n", 26);
-				minishell->status = 1;
+				minishell->status = E_FAILURE;
 			}
 			else if (key_exist(minishell->env, cmd->args[i]))
 			{

@@ -42,7 +42,7 @@ int ft_open(char *file, int flag, int mode)
 	fd = open(file, flag, mode);
 	if (fd == -1)
 	{
-		non_fatal("open ");
+		non_fatal("open ", NULL);
 		return (-1);
 	}
 	return (fd);

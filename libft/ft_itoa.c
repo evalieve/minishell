@@ -6,7 +6,7 @@
 /*   By: evan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/01/06 11:18:06 by evan-der      #+#    #+#                 */
-/*   Updated: 2021/03/01 09:29:56 by evan-der      ########   odam.nl         */
+/*   Updated: 2024/01/16 18:49:40 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,7 @@ char	*ft_itoa(int n)
 	char	*result;
 
 	len = nbrlen(n);
-	nbr = (char *)malloc((len + 1) * sizeof(char));
-	if (!nbr)
-		return (0);
+	nbr = (char *)ft_malloc((len + 1) * sizeof(char));
 	result = last(n, len, nbr);
 	return (result);
 }

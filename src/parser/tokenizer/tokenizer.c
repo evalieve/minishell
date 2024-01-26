@@ -43,7 +43,7 @@ bool ft_isabsolute(char *command)
 	{
 		if (command[i] == '/')
 		{
-			printf("true ret\n");
+			// printf("true ret\n");
 			return (true);
 		}
 		i++;
@@ -126,7 +126,7 @@ t_cmds *ft_nodenew(void)
 {
 	t_cmds *new;
 
-	new = ft_malloc(1 *sizeof(t_cmds));
+	new = (t_cmds *)ft_malloc(1 *sizeof(t_cmds));
 	new->cmd = NULL;
 	// new->path = NULL;
 	new->fd_in = 0;
@@ -145,7 +145,7 @@ t_tokens	*ft_lstnew_token(char *content, int quote)
 {
 	t_tokens *new;
 
-	new = ft_malloc(1 * sizeof(t_tokens));
+	new = (t_tokens *)ft_malloc(1 * sizeof(t_tokens));
 	new->quote = quote;
 	new->value = content;
 	new->len = ft_strlen(content);
@@ -212,9 +212,7 @@ t_redir	*ft_redirnew(char *file, t_type type)
 {
 	t_redir *new;
 
-	new = malloc(sizeof(t_redir));
-	if (!new)
-		return (NULL);
+	new = (t_redir *)ft_malloc(sizeof(t_redir));
 	new->file = file;
 	new->type = type;
 	new->next = NULL;
@@ -251,13 +249,7 @@ void	ft_append(char **line, char *buf, size_t l)
 	size_t	line_size;
 
 	line_size = ft_strlen(*line);
-	new_line = malloc((line_size + 1 + l) * sizeof(char));
-	if (!new_line)
-	{
-		free(*line);
-		*line = NULL;
-		return ;
-	}
+	new_line = (char *)ft_malloc((line_size + 1 + l) * sizeof(char));
 	new_line[line_size + l] = '\0';
 	while (l--)
 		new_line[line_size + l] = buf[l];
@@ -468,7 +460,7 @@ char **ft_addargs(t_tokens *tokens)
 		temp = temp->next;
 	}
 	temp = tokens;
-	args = malloc((i + 1) * sizeof(char *));
+	args = (char **)ft_malloc((i + 1) * sizeof(char *));
 	args[i] = NULL;
 	int j = i;
 	i = 0;
