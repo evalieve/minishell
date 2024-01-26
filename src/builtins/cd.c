@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:28 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/17 11:27:28 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/26 19:04:56 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,28 @@ char	*return_value(t_env *env, char *key)
 	return (NULL);
 }
 
+void	handle_cwd_error(t_minishell *minishell)
+{
+	char	*pwd;
+	char	*pwdkey;
+	char	*oldpwd;
+
+	pwd = ft_strjoin(minishell->pwd, "/..");
+	pwdkey = ft_strjoin("PWD=", pwd);
+	oldpwd = ft_strjoin("OLDPWD=", minishell->pwd);
+	if (!oldpwd)
+		oldpwd = ft_strdup("OLDPWD=");
+	if (key_exist(minishell->env, "OLDPWD"))
+		change_value(minishell->env, oldpwd);
+	if (key_exist(minishell->env, "PWD"))
+		change_value(minishell->env, pwdkey);
+	minishell->pwd = get_value(pwdkey);
+	minishell->oldpwd = get_value(oldpwd);
+	free(pwd);
+	free(oldpwd);
+	free(pwdkey);
+}
+
 void	change_pwds(t_minishell *minishell)
 {
 	char	*cwd;
@@ -33,6 +55,12 @@ void	change_pwds(t_minishell *minishell)
 	char	*oldpwd;
 
 	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		non_fatal("cd: error retrieving current directory: getcwd: cannot access parent directories", NULL);
+		return (handle_cwd_error(minishell));
+	} // even goede error messages simulair aan bash maken
+	//cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
 	pwd = ft_strjoin("PWD=", cwd);
 	oldpwd = ft_strjoin("OLDPWD=", minishell->pwd);
 	if (!oldpwd)
