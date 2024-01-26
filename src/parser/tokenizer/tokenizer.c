@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/26 15:14:47 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/26 15:56:41 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@ t_tokens *idword(t_tokens *tokens);
 
 bool ft_checkbi(char *command)
 {
-	if (ft_strcmp(command, "echo") == 0)
+	if (ft_strcmp(command, "echo") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "cd") == 0)
+	else if (ft_strcmp(command, "cd") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "pwd") == 0)
+	else if (ft_strcmp(command, "pwd") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "export") == 0)
+	else if (ft_strcmp(command, "export") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "unset") == 0)
+	else if (ft_strcmp(command, "unset") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "env") == 0)
+	else if (ft_strcmp(command, "env") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "exit") == 0)
+	else if (ft_strcmp(command, "exit") == SUCCESS)
 		return (true);
 	else
 		return (false);
@@ -492,10 +492,11 @@ t_cmds *makenodes(t_tokens *tokens)
 			}
 			else if (tokens->word == FIL || tokens->word == LIM)
 			{
-				if (tokens->prev->type == RDOUT || tokens->prev->type == RDAPPND)
+				if (tokens->prev->type == RDOUT || tokens->prev->type == RDAPPND || \
+						tokens->prev->type == RDHDOC || tokens->prev->type == RDIN)
 					list->redir = ft_rediradd(list->redir, ft_redirnew(tokens->value, tokens->prev->type));
-				else if (tokens->prev->type == RDHDOC || tokens->prev->type == RDIN)
-					list->redir = ft_rediradd(list->redir, ft_redirnew(tokens->value, tokens->prev->type));
+				// else if (tokens->prev->type == RDHDOC || tokens->prev->type == RDIN)
+				// 	list->redir = ft_rediradd(list->redir, ft_redirnew(tokens->value, tokens->prev->type));
 				else
 					list->redir = ft_rediradd(list->redir, ft_redirnew(tokens->value, RDOUT));
 			}

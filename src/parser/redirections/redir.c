@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/21 13:55:31 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/25 16:51:57 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/26 16:13:17 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ void	handle_red_in1(t_cmds *node, t_redir *redir)
 		ft_close(node->pipe[1]);
 	}
 	// printf("node->fd_in in handle_ret_in1 = %d\n", node->fd_in);
-	if (node->fd_in == ERROR)
-		return ; // hij moet stoppen met de rest van de files openen na error met permissions
+	// if (node->fd_in == ERROR) // dit slaat nergens op, want hij returned sws al hierna en check is in andere func
+		// return ; // hij moet stoppen met de rest van de files openen na error met permissions
 	// if (node->in->next)
 	// 	ft_close(node->fd_in);
 }
@@ -83,8 +83,8 @@ void	handle_red_out1(t_cmds *node, t_redir *redir)
 		node->fd_out = ft_open(redir->file, \
 		O_RDWR | O_CREAT | O_APPEND, 0644);
 	// printf("node->fd_out in handle_ret_out1 = %d\n", node->fd_out);
-	if (node->fd_out == ERROR)
-		return ; // hij moet stoppen met de rest van de files openen na error met permissions
+	// if (node->fd_out == ERROR) // dit slaat nergens op, want hij returned sws al hierna en check is in andere func
+	// 	return ; // hij moet stoppen met de rest van de files openen na error met permissions
 	// if (node->redir->next)
 	// 	ft_close(node->fd_out);
 }
@@ -104,6 +104,8 @@ void	handle_redir(t_cmds *node)
 			handle_red_in1(node, tmp);
 			if (node->fd_in == ERROR)
 			{
+				if (node->fd_out != STDOUT_FILENO) // bij error moet hij ook de out file sluiten mits deze bestaat en geopend is
+					ft_close(node->fd_out);
 				// printf("error RDIN\n");
 				return ; // hij moet stoppen met de rest van de files openen na error met permissions
 			}
@@ -116,6 +118,8 @@ void	handle_redir(t_cmds *node)
 			handle_red_out1(node, tmp);
 			if (node->fd_out == ERROR)
 			{
+				if (node->fd_in != STDIN_FILENO) // bij error moet hij ook de in file sluiten mits deze bestaat en geopend is
+					ft_close(node->fd_in);
 				// printf("error RDOUT\n");
 				return ; // hij moet stoppen met de rest van de files openen na error met permissions
 			}

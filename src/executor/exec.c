@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:49 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/25 15:30:42 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/26 17:09:41 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ void	exec_command(t_cmds *cmd, t_minishell *minishell)
 		path = ft_strdup(cmd->cmd);
 	else
 		path = get_path(cmd->cmd, minishell->env);
-	if (!path)
+	if (!path && key_exist(minishell->env, "PATH"))
 	{
 		free(envp);
 		error_message(cmd->cmd, NULL, "command not found");
@@ -177,6 +177,14 @@ void	exec_command(t_cmds *cmd, t_minishell *minishell)
 		exit(E_NO_SUCH_FILE_OR_DIRECTORY);
 	}
 	ft_execve(path, cmd->args, envp);
+}
+
+void	close_fds(t_cmds *cmd)
+{
+	if (cmd->fd_in > STDIN_FILENO)
+		ft_close(cmd->fd_in);
+	if (cmd->fd_out > STDOUT_FILENO)
+		ft_close(cmd->fd_out);
 }
 
 void	exec_pipe(t_cmds *cmds, t_exec *exec, t_minishell *minishell)
@@ -201,6 +209,7 @@ void	exec_pipe(t_cmds *cmds, t_exec *exec, t_minishell *minishell)
 		if (cmds->builtin)
 		{
 			exec_builtin(cmds, minishell);
+			close_fds(cmds);
 			exit(minishell->status);
 		}
 		else
@@ -220,10 +229,11 @@ void	exec_simple(t_cmds *cmd, t_minishell *minishell)
 		if (minishell->cmds->pid == CHILD)
 		{
 			if (redirect(cmd) == FAILURE)
-				exit(E_FAILURE); // ??? 127
+				exit(E_FAILURE);
 			exec_command(cmd, minishell);
 		}
 	}
+	close_fds(cmd);
 }
 
 int	lst_len(t_cmds *cmds)
@@ -250,15 +260,19 @@ void	executor(t_minishell *minishell)
 	{
 		while (tmp)
 		{
-			exec_pipe(tmp, &exec, minishell);
-			if (exec.prev_read)
-				ft_close(exec.prev_read);
-			exec.prev_read = exec.pipe[READ_END];
-			ft_close(exec.pipe[WRITE_END]);
+			if (tmp->cmd)
+			{
+				exec_pipe(tmp, &exec, minishell);
+				if (exec.prev_read)
+					ft_close(exec.prev_read);
+				exec.prev_read = exec.pipe[READ_END];
+				ft_close(exec.pipe[WRITE_END]);
+			}
+			close_fds(tmp);
 			tmp = tmp->next;
 		}
 		ft_close(exec.pipe[READ_END]);
 	}
-	else
+	else if (tmp->cmd)
 		exec_simple(tmp, minishell);
 }
