@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 19:23:53 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/25 15:22:45 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,7 @@ typedef struct s_cmds
 	// ohjee ?? executor
 	bool			builtin;
 	bool			absolute;
-	struct s_redir	*in;
-	struct s_redir	*out;
+	struct s_redir	*redir;
 	struct s_cmds	*next;
 	struct s_cmds	*prev;
 }				t_cmds;
@@ -204,7 +203,7 @@ t_tokens *idword(t_tokens *tokens);
 void    remove_white(t_tokens *head);
 t_cmds *makenodes(t_tokens *tokens);
 char **ft_addargs(t_tokens *tokens);
-t_tokens *idtokens(t_tokens *list);
+t_tokens *idtokens(t_tokens *list, t_minishell *minishell);
 t_tokens *mergetokens(t_tokens *list);
 int	compvalue(t_tokens *list, t_tokens *next);
 void    combine_words(t_tokens *head);
@@ -231,8 +230,10 @@ int	iswhspace(char *str);
 /* REDIRECTIONS */
 char	*heredoc_loop(char *line, t_cmds *node);
 void	handle_redir(t_cmds *node);
-void	handle_red_out(t_cmds *node);
-void	handle_red_in(t_cmds *node);
+//void	handle_red_out(t_cmds *node);
+void	handle_red_out1(t_cmds *node, t_redir *redir);
+//void	handle_red_in(t_cmds *node);
+void	handle_red_in1(t_cmds *node, t_redir *redir);
 
 /* EXPANDER */
 
