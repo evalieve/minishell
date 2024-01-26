@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:28 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 19:47:16 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/17 11:27:28 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	builtin_cd(t_cmds *cmd, t_minishell *minishell)
 		path = return_value(minishell->env, "HOME");
 		if (!path)
 		{
-			write(STDERR_FILENO, "minishell: cd: HOME not set\n", 29);
+			error_message("cd", NULL, "HOME not set");
 			minishell->status = E_FAILURE;
 			return ;
 		}
@@ -69,7 +69,7 @@ void	builtin_cd(t_cmds *cmd, t_minishell *minishell)
 	if (chdir(path) == ERROR)
 	{
 		minishell->status = E_FAILURE;
-		non_fatal("cd", cmd->args[1]);
+		non_fatal(cmd->cmd, cmd->args[1]);
 		return ;
 	}
 	change_pwds(minishell);

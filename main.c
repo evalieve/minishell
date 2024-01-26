@@ -50,7 +50,7 @@ int main(int argc, char *argv[], char *envp[])
 	// password();
 	while (minishell->exit == false) // wanneer wordt deze op true gezet?
 	{
-		signals(); // signals??
+		signals(S_PARENT);
 		minishell->line = readline("minishell$ ");
 		if (!minishell->line)
 			signal_ctrl_d();
@@ -63,7 +63,6 @@ int main(int argc, char *argv[], char *envp[])
 			executor(minishell);
 			wait_for_child(minishell);
 		}
-		// printf("[MAIN] minishell->cmds->cmd: %s\n", minishell->cmds->cmd);
 		// clean_shell(minishell);
 	}
 	// free_struct(minishell);

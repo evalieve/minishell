@@ -24,6 +24,9 @@ SRCS =  src/builtins/cd.c		\
 		src/error/wrap_func2.c \
 		src/error/free/free_utils.c \
 		src/error/free/free.c \
+		src/utils/utils.c \
+		src/builtins/export_utils.c \
+		src/builtins/export_utils2.c \
         main.c
 
 SRC_DIR = src/
