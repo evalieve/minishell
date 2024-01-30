@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/30 18:10:47 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/30 18:33:31 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,9 +245,11 @@ t_cmds	*parse_loop(t_tokens *tokens, t_cmds *list);
 char	*heredoc_loop(char *line, t_cmds *node);
 void	handle_redir(t_cmds *node);
 //void	handle_red_out(t_cmds *node);
-void	handle_red_out1(t_cmds *node, t_redir *redir);
+void	handle_red_out(t_cmds *node, t_redir *redir);
 //void	handle_red_in(t_cmds *node);
-void	handle_red_in1(t_cmds *node, t_redir *redir);
+void	handle_red_in(t_cmds *node, t_redir *redir);
+bool	handle_redir_out_loop(t_cmds *node, t_redir *tmp);
+bool	handle_redir_in_loop(t_cmds *node, t_redir *tmp);
 
 /* EXPANDER */
 

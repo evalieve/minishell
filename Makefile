@@ -38,6 +38,7 @@ SRCS =  src/builtins/cd.c		\
 		tests/test.c \
 		src/executor/exec_builtin.c \
 		src/executor/exec_utils.c \
+		src/parser/redirections/redir_utils.c \
         main.c
 
 SRC_DIR = src/

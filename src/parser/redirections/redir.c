@@ -6,12 +6,13 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/21 13:55:31 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/29 13:28:13 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 18:34:43 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
+// heredoc signal! TODO
 char	*heredoc_loop(char *line, t_cmds *node)
 {
 	while (1)
@@ -28,7 +29,7 @@ char	*heredoc_loop(char *line, t_cmds *node)
 	return (line);
 }
 
-void	handle_red_in1(t_cmds *node, t_redir *redir)
+void	handle_red_in(t_cmds *node, t_redir *redir)
 {
 	char	*line;
 
@@ -44,7 +45,7 @@ void	handle_red_in1(t_cmds *node, t_redir *redir)
 	}
 }
 
-void	handle_red_out1(t_cmds *node, t_redir *redir)
+void	handle_red_out(t_cmds *node, t_redir *redir)
 {
 	if (redir->type == RDOUT)
 		node->fd_out = ft_open(redir->file, \
@@ -63,26 +64,13 @@ void	handle_redir(t_cmds *node)
 	{
 		if (tmp->type == RDIN || tmp->type == RDHDOC)
 		{
-			if (node->fd_in != STDIN_FILENO)
-				ft_close(node->fd_in);
-			handle_red_in1(node, tmp);
-			if (node->fd_in == ERROR)
-			{
-				if (node->fd_out != STDOUT_FILENO)
-					return ;
-			}
+			if (!handle_redir_in_loop(node, tmp))
+				return ;
 		}
 		else if (tmp->type == RDOUT || tmp->type == RDAPPND)
 		{
-			if (node->fd_out != STDOUT_FILENO)
-				ft_close(node->fd_out);
-			handle_red_out1(node, tmp);
-			if (node->fd_out == ERROR)
-			{
-				if (node->fd_in != STDIN_FILENO)
-					ft_close(node->fd_in);
+			if (!handle_redir_out_loop(node, tmp))
 				return ;
-			}
 		}
 		tmp = tmp->next;
 	}

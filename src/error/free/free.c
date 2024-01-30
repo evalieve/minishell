@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:55:46 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 16:25:25 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 18:45:19 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,38 +42,17 @@ void	clean_shell(t_minishell *mini)
 void	free_mini_struct(t_minishell *mini)
 {
 	if (mini->line)
-	{
 		free(mini->line);
-		mini->line = NULL;
-	}
 	if (mini->pwd)
-	{
 		free(mini->pwd);
-		mini->pwd = NULL;
-	}
 	if (mini->oldpwd)
-	{
 		free(mini->oldpwd);
-		mini->oldpwd = NULL;
-	}
 	if (mini->cwd)
-	{
 		free(mini->cwd);
-		mini->cwd = NULL;
-	}
 	if (mini->cmds)
-	{
 		free_node(mini->cmds);
-		mini->cmds = NULL;
-	}
 	if (mini->env)
-	{
 		free_env(mini->env);
-		mini->env = NULL;
-	}
 	if (mini)
-	{
 		free(mini);
-		mini = NULL;
-	}
 }

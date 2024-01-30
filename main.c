@@ -6,16 +6,13 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/29 13:50:12 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/30 16:25:54 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 18:50:08 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/minishell.h"
-// #include "include/minishell.h"
-// #include <minishell.h>
 
-
-void password()
+void	password(void)
 {
 	char	*password;
 
@@ -38,9 +35,10 @@ void password()
 
 void	wait_for_child(t_minishell *minishell)
 {
-	int status;
+	int		status;
+	t_cmds	*ptr;
 
-	t_cmds *ptr = minishell->cmds;
+	ptr = minishell->cmds;
 	while (ptr->next)
 	{
 		if (ptr->pid != UNSET)
@@ -54,17 +52,8 @@ void	wait_for_child(t_minishell *minishell)
 	}
 }
 
-int main(int argc, char *argv[], char *envp[])
+void	start_minishell(t_minishell *minishell)
 {
-	t_minishell *minishell;
-	int			e_status;
-
-	(void) argc;
-	(void) argv;
-	minishell = init_struct(envp);
-	if (!minishell)
-		return (ERROR);
-	password();
 	while (!minishell->exit)
 	{
 		signals(S_PARENT);
@@ -83,6 +72,20 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		clean_shell(minishell);
 	}
+}
+
+int	main(int argc, char *argv[], char *envp[])
+{
+	t_minishell	*minishell;
+	int			e_status;
+
+	(void) argc;
+	(void) argv;
+	minishell = init_struct(envp);
+	if (!minishell)
+		return (ERROR);
+	password();
+	start_minishell(minishell);
 	e_status = minishell->status;
 	clear_history();
 	free_mini_struct(minishell);

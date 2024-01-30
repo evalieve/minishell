@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 16:57:38 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 18:03:33 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/30 18:44:26 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,9 @@ int	closedquote(char *line, char quote)
 	return (end);
 }
 
-t_tokens	*quotes(char *line)
+t_tokens	*quotes_loop(char *line, t_tokens *list, int start, int end)
 {
-	t_tokens	*list;
-	int			start;
-	int			end;
-
-	list = NULL;
-	start = 0;
-	end = 0;
-	while (line[start] != '\0')
+	while (line[start])
 	{
 		while (line[end] != '\0' && line[end] != '\'' && line[end] != '\"')
 			end++;
@@ -60,5 +53,15 @@ t_tokens	*quotes(char *line)
 		}
 		start = end;
 	}
-	return (ft_lstlast_token(list));
+	return (list);
+}
+
+t_tokens	*quotes(char *line)
+{
+	t_tokens	*list;
+
+	list = NULL;
+	list = quotes_loop(line, list, 0, 0);
+	list = ft_lstlast_token(list);
+	return (list);
 }

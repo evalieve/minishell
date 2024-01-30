@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 17:19:16 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 18:19:12 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 18:21:29 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,22 +81,6 @@ t_tokens	*idword(t_tokens *tokens)
 			cmd = false;
 		else if (list->type == WORD)
 			cmd = idword_check(list, prev, cmd);
-		// {
-		// 	if (list->prev)
-		// 		prev = list->prev;
-		// 	if ((!list->prev || prev->type == PIPE || \
-		// 	prev->word == FIL) && cmd == false)
-		// 	{
-		// 		list->word = CMD;
-		// 		cmd = true;
-		// 	}
-		// 	else if (prev->word == CMD || prev->word == INPUT)
-		// 		list->word = INPUT;
-		// 	else if (prev->type == RDHDOC)
-		// 		list->word = FIL;
-		// 	else
-		// 		list->word = FIL;
-		// }
 		prev = NULL;
 		list = list->next;
 	}

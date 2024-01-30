@@ -6,7 +6,7 @@
 /*   By: evan-der <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/09 15:14:37 by evan-der      #+#    #+#                 */
-/*   Updated: 2024/01/16 22:26:26 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 18:53:59 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,6 @@ void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 						void (*del)(void *));
 
-void *ft_malloc(size_t size);
+void				*ft_malloc(size_t size);
 
 #endif
