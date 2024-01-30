@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:45 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 15:39:39 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 14:56:52 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,13 @@ void	key_unset(t_minishell *minishell, char *arg)
 	{
 		if (ft_strcmp(ptr->key, key) == SUCCESS)
 		{
+			free(key);
 			delete_from_env(minishell, ptr);
 			return ;
 		}
 		ptr = ptr->next;
 	}
+	free(key);
 }
 
 void	builtin_unset(t_cmds *cmd, t_minishell *minishell)
@@ -65,6 +67,5 @@ void	builtin_unset(t_cmds *cmd, t_minishell *minishell)
 		}
 		i++;
 	}
+	minishell->status = E_SUCCESS;
 }
-// bij pwd en oldpwd moet ook in minishell->pwd 
-// en minishell->oldpwd de value worden verwijderd

@@ -6,37 +6,11 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:36 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/26 15:13:45 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 18:02:16 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-void	add_to_env(t_env *env, char *arg, bool equal_sign)
-{
-	t_env	*ptr;
-	t_env	*new;
-
-	ptr = env;
-	new = (t_env *)ft_malloc(sizeof(t_env));
-	new->key = get_key(arg);
-	new->equal_sign = equal_sign;
-	if (!new->equal_sign)
-		new->value = NULL;
-	else
-		new->value = get_value(arg);
-	new->next = NULL;
-	new->prev = NULL;
-	if (!env)
-		env = new;
-	else
-	{
-		while (ptr->next)
-			ptr = ptr->next;
-		ptr->next = new;
-		new->prev = ptr;
-	}
-}
 
 void	change_value(t_env *env, char *arg)
 {
@@ -51,7 +25,8 @@ void	change_value(t_env *env, char *arg)
 	{
 		if (ft_strcmp(ptr->key, arg_key) == SUCCESS)
 		{
-			free(ptr->value);
+			if (ptr->value)
+				free(ptr->value);
 			free(arg_key);
 			ptr->value = arg_value;
 			if (ptr->equal_sign == false)
@@ -60,6 +35,8 @@ void	change_value(t_env *env, char *arg)
 		}
 		ptr = ptr->next;
 	}
+	free(arg_key);
+	free(arg_value);
 }
 
 void	print_export(t_minishell *minishell, int fd)
@@ -80,10 +57,32 @@ bool	validate_identifier_export(char *arg)
 	if (validate_key(arg))
 		return (true);
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd("export: `", STDERR_FILENO);	
+	ft_putstr_fd("export: `", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 	return (false);
+}
+
+void	export_variables(t_cmds *cmd, t_minishell *minishell, int i)
+{
+	if (!validate_identifier_export(cmd->args[i]))
+		minishell->status = E_FAILURE;
+	else if (key_exist(minishell->env, cmd->args[i]) && \
+			equal_sign_exist(cmd->args[i]))
+	{
+		change_value(minishell->env, cmd->args[i]);
+		check_for_pwd_and_oldpwd(minishell, cmd->args[i], \
+								equal_sign_exist(cmd->args[i]));
+		minishell->status = E_SUCCESS;
+	}
+	else if (!key_exist(minishell->env, cmd->args[i]))
+	{
+		add_to_env(minishell->env, cmd->args[i], \
+					equal_sign_exist(cmd->args[i]));
+		check_for_pwd_and_oldpwd(minishell, cmd->args[i], \
+									equal_sign_exist(cmd->args[i]));
+		minishell->status = E_SUCCESS;
+	}
 }
 
 void	builtin_export(t_cmds *cmd, t_minishell *minishell)
@@ -91,33 +90,18 @@ void	builtin_export(t_cmds *cmd, t_minishell *minishell)
 	int	i;
 
 	i = 1;
-	while (cmd->args[i] && ft_strcmp(cmd->args[i], "") == SUCCESS) // omdat er een lege string kan zijn met non existend key (expand naar "")
+	while (cmd->args[i] && ft_strcmp(cmd->args[i], "") == SUCCESS)
 		i++;
 	if (!cmd->args[i])
 		return (print_export(minishell, cmd->fd_out));
 	while (cmd->args[i])
 	{
-		if (ft_strcmp(cmd->args[i], "") == SUCCESS) // kan korter?
+		if (ft_strcmp(cmd->args[i], "") == SUCCESS)
 		{
 			i++;
 			continue ;
 		}
-		else if (!validate_identifier_export(cmd->args[i]))
-			minishell->status = E_FAILURE;
-		else if (key_exist(minishell->env, cmd->args[i]) && equal_sign_exist(cmd->args[i]))
-		{
-			change_value(minishell->env, cmd->args[i]);
-			check_for_pwd_and_oldpwd(minishell, cmd->args[i], equal_sign_exist(cmd->args[i]));
-			minishell->status = E_SUCCESS;
-		}
-		else if (!key_exist(minishell->env, cmd->args[i]))
-		{
-			add_to_env(minishell->env, cmd->args[i], equal_sign_exist(cmd->args[i]));
-			check_for_pwd_and_oldpwd(minishell, cmd->args[i], equal_sign_exist(cmd->args[i]));
-			minishell->status = E_SUCCESS;
-		}
+		export_variables(cmd, minishell, i);
 		i++;
 	}
 }
-
-// exit status export: laatste arg geeft 0 bij success of 1 bij failure. (dus steeds aanpassen)

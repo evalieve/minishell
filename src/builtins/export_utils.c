@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/25 15:25:44 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/25 15:29:44 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/29 13:31:09 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ bool	validate_key(char *arg)
 	i = 0;
 	if (!ft_isalpha(arg[i]) && arg[i] != '_')
 		return (false);
-	while (arg[i] && arg[i] != '=') 
+	while (arg[i] && arg[i] != '=')
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
 			return (false);

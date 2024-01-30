@@ -6,17 +6,43 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/25 15:29:07 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/25 15:29:40 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 18:02:22 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
+void	add_to_env(t_env *env, char *arg, bool equal_sign)
+{
+	t_env	*ptr;
+	t_env	*new;
+
+	ptr = env;
+	new = (t_env *)ft_malloc(sizeof(t_env));
+	new->key = get_key(arg);
+	new->equal_sign = equal_sign;
+	if (!new->equal_sign)
+		new->value = NULL;
+	else
+		new->value = get_value(arg);
+	new->next = NULL;
+	new->prev = NULL;
+	if (!env)
+		env = new;
+	else
+	{
+		while (ptr->next)
+			ptr = ptr->next;
+		ptr->next = new;
+		new->prev = ptr;
+	}
+}
+
 void	set_working_dir(t_minishell *minishell, char *arg_key, char *arg)
 {
 	if (ft_strcmp(arg_key, "PWD") == SUCCESS)
 	{
-		if (minishell->pwd) // werkt dit wel als pwd NULL is?
+		if (minishell->pwd)
 			free(minishell->pwd);
 		minishell->pwd = get_value(arg);
 	}
@@ -38,9 +64,9 @@ void	adopt_wd_value_from_struct(t_minishell *minishell, char *arg_key)
 		if (ft_strcmp(ptr->key, arg_key) == SUCCESS)
 		{
 			if (ft_strcmp(arg_key, "PWD") == SUCCESS)
-				ptr->value = minishell->pwd;
+				ptr->value = ft_strdup(minishell->pwd);
 			else
-				ptr->value = minishell->oldpwd;
+				ptr->value = ft_strdup(minishell->oldpwd);
 			ptr->equal_sign = true;
 			return ;
 		}
@@ -48,12 +74,14 @@ void	adopt_wd_value_from_struct(t_minishell *minishell, char *arg_key)
 	}
 }
 
-void	check_for_pwd_and_oldpwd(t_minishell *minishell, char *arg, bool equal_sign)
+void	check_for_pwd_and_oldpwd(t_minishell *minishell, \
+									char *arg, bool equal_sign)
 {
 	char	*arg_key;
-	
+
 	arg_key = get_key(arg);
-	if (ft_strcmp(arg_key, "PWD") == SUCCESS || ft_strcmp(arg_key, "OLDPWD") == SUCCESS)
+	if (ft_strcmp(arg_key, "PWD") == SUCCESS || \
+		ft_strcmp(arg_key, "OLDPWD") == SUCCESS)
 	{
 		if (equal_sign)
 			set_working_dir(minishell, arg_key, arg);

@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/21 13:55:31 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 19:08:00 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/29 13:28:13 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ void	handle_red_in1(t_cmds *node, t_redir *redir)
 		node->fd_in = node->pipe[0];
 		ft_close(node->pipe[1]);
 	}
-	if (node->fd_in == ERROR)
-		return ;
 }
 
 void	handle_red_out1(t_cmds *node, t_redir *redir)
@@ -54,8 +52,6 @@ void	handle_red_out1(t_cmds *node, t_redir *redir)
 	else if (redir->type == RDAPPND)
 		node->fd_out = ft_open(redir->file, \
 		O_RDWR | O_CREAT | O_APPEND, 0644);
-	if (node->fd_out == ERROR)
-		return ;
 }
 
 void	handle_redir(t_cmds *node)
@@ -71,7 +67,10 @@ void	handle_redir(t_cmds *node)
 				ft_close(node->fd_in);
 			handle_red_in1(node, tmp);
 			if (node->fd_in == ERROR)
-				return ;
+			{
+				if (node->fd_out != STDOUT_FILENO)
+					return ;
+			}
 		}
 		else if (tmp->type == RDOUT || tmp->type == RDAPPND)
 		{
@@ -79,7 +78,11 @@ void	handle_redir(t_cmds *node)
 				ft_close(node->fd_out);
 			handle_red_out1(node, tmp);
 			if (node->fd_out == ERROR)
+			{
+				if (node->fd_in != STDIN_FILENO)
+					ft_close(node->fd_in);
 				return ;
+			}
 		}
 		tmp = tmp->next;
 	}

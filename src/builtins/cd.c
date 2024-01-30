@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:28 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/17 11:27:28 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 17:47:13 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,41 @@ char	*return_value(t_env *env, char *key)
 	return (NULL);
 }
 
+void	if_exist_change_pwds(t_minishell *minishell, char *oldpwd, char *pwd)
+{
+	if (key_exist(minishell->env, "OLDPWD"))
+		change_value(minishell->env, oldpwd);
+	if (minishell->oldpwd)
+		free(minishell->oldpwd);
+	minishell->oldpwd = get_value(oldpwd);
+	if (key_exist(minishell->env, "PWD"))
+		change_value(minishell->env, pwd);
+	if (minishell->pwd)
+		free(minishell->pwd);
+	minishell->pwd = get_value(pwd);
+}
+
+void	handle_cwd_error(t_minishell *minishell)
+{
+	char	*pwd;
+	char	*pwdkey;
+	char	*oldpwd;
+
+	pwd = ft_strjoin(minishell->pwd, "/..");
+	if (!pwd)
+		pwd = ft_strdup("/..");
+	pwdkey = ft_strjoin("PWD=", pwd);
+	oldpwd = ft_strjoin("OLDPWD=", minishell->pwd);
+	if (!oldpwd)
+		oldpwd = ft_strdup("OLDPWD=");
+	if_exist_change_pwds(minishell, oldpwd, pwdkey);
+	if (minishell->cwd)
+		free(minishell->cwd);
+	minishell->cwd = pwd;
+	free(oldpwd);
+	free(pwdkey);
+}
+
 void	change_pwds(t_minishell *minishell)
 {
 	char	*cwd;
@@ -33,21 +68,21 @@ void	change_pwds(t_minishell *minishell)
 	char	*oldpwd;
 
 	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		non_fatal(CWD_E_MESSAGE, NULL);
+		return (handle_cwd_error(minishell));
+	}
 	pwd = ft_strjoin("PWD=", cwd);
 	oldpwd = ft_strjoin("OLDPWD=", minishell->pwd);
 	if (!oldpwd)
 		oldpwd = ft_strdup("OLDPWD=");
-	if (key_exist(minishell->env, "OLDPWD"))
-		change_value(minishell->env, oldpwd);
-	free(minishell->oldpwd);
-	minishell->oldpwd = get_value(oldpwd);
-	if (key_exist(minishell->env, "PWD"))
-		change_value(minishell->env, pwd);
-	free(minishell->pwd);
-	minishell->pwd = get_value(pwd);
+	if_exist_change_pwds(minishell, oldpwd, pwd);
+	if (minishell->cwd)
+		free(minishell->cwd);
+	minishell->cwd = cwd;
 	free(pwd);
 	free(oldpwd);
-	free(cwd);
 }
 
 void	builtin_cd(t_cmds *cmd, t_minishell *minishell)

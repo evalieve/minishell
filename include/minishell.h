@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/30 18:04:15 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/30 18:10:47 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 #define OLD_STATUS -2 // beter andere naam geven want dit betekent voor meerdere cases dat de huidige exit status geruikt moet worden
 #define NON_NUMERIC -3
 #define UNSET -4
+
+#define CWD_E_MESSAGE "cd: error retrieving current directory: getcwd: cannot access parent directories"
 
 typedef enum e_signal
 {
@@ -76,7 +78,6 @@ typedef enum e_status
 	E_SIGQUIT = 131,
 	E_UNKNOWN = 255,
 	E_SYNTAX_ERROR = 258,
-	// status nums -> als status -42 is dan error minishell en exit-> -1
 }	t_status;
 
 typedef struct	s_env
@@ -111,18 +112,13 @@ typedef struct s_redir
 typedef struct s_cmds
 {
 	char			*cmd;
-	// char			*path;
 	char			**args;
-	// ohjee ?? executor
 	int				fd_out;
 	int				fd_in;
 	int				pipe[2];
 	pid_t			pid;
-	// ohjee ?? executor
 	bool			builtin;
 	bool			absolute;
-	// struct s_redir	*in;
-	// struct s_redir	*out;
 	struct s_redir	*redir;
 	struct s_cmds	*next;
 	struct s_cmds	*prev;
@@ -132,16 +128,17 @@ typedef struct s_exec
 {
 	int				pipe[2];
 	int				prev_read;
-	pid_t			pid;	
 }				t_exec;
 
 typedef struct	s_minishell
 {
 	t_env			*env;
 	int				status;
-	bool			exit; //?
+	bool			exit;
+	bool			simple;
 	char			*pwd;
 	char			*oldpwd;
+	char			*cwd;
 	char 			*line;
 	struct s_cmds	*cmds;
 }				t_minishell;
@@ -274,7 +271,9 @@ void	free_args(char **args);
 void	free_list(t_tokens *list);
 void	fatal(char *str, char *pstr);
 void	non_fatal(char *str, char *pstr);
-void	free_all(t_minishell *mini);
+void	free_mini_struct(t_minishell *mini);
+void	clean_shell(t_minishell *mini);
+void	free_double_char(char **str);
 void	error_message(char *cmd, char *arg, char *message);
 
 void *ft_malloc(size_t size);
@@ -308,6 +307,9 @@ bool	equal_sign_exist(char *arg);
 bool	key_exist(t_env *env, char *arg);
 bool	validate_key(char *arg);
 void	change_value(t_env *env, char *arg);
+void	close_fds(t_cmds *cmd);
+long long	str_to_num(char *str);
+void	add_to_env(t_env *env, char *arg, bool equal_sign);
 
 void	printlist(t_tokens *list);
 void	printnode(t_cmds *node);
