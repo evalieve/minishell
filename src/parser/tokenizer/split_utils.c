@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 16:43:26 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 19:15:15 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/29 16:05:10 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	compvalue(t_tokens *list, t_tokens *next)
 	return (1);
 }
 
-void	remove_white(t_tokens *head)
+t_tokens	*remove_white(t_tokens *head)
 {
 	t_tokens	*tmp;
 	t_tokens	*prev;
@@ -76,11 +76,15 @@ void	remove_white(t_tokens *head)
 			else if (tmp->next)
 				prev = tmp->next;
 			else
+			{
 				prev = NULL;
+				head = NULL;
+			}
 			ft_lstremove(tmp);
 			tmp = prev;
 		}
 		else
 			tmp = tmp->next;
 	}
+	return (head);
 }

@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:24:04 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 19:02:30 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/30 16:49:07 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,17 @@ char	*check_var(char *line)
 char	*ft_replace(char *line, char *var, char *value, int start)
 {
 	char	*newline;
+	size_t	len;
 
 	newline = NULL;
+	len = ft_strlen(line) - ft_strlen(var) + ft_strlen(value);
 	newline = ft_substr(line, 0, start);
 	ft_append(&newline, value, ft_strlen(value));
-	ft_append(&newline, line + start + ft_strlen(var) + 1, \
-		ft_strlen(line + start + ft_strlen(var) + 1));
-	free(line);
+	if (ft_strlen(newline) < (len))
+	{
+		ft_append(&newline, line + start + ft_strlen(var), \
+		len - ft_strlen(newline));
+	}
 	return (newline);
 }
 

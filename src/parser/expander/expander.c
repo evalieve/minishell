@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/22 12:05:01 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 19:35:11 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/30 16:49:26 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,18 @@ char	*expand_var(char *line, t_minishell *mini, int i)
 	char	*var;
 	char	*value;
 
-	var = check_var(line + i + 1);
-	if (ft_strcmp(var, "OLDPWD") == 0)
+	var = ft_strdup("$");
+	ft_append(&var, check_var(line + i + 1), \
+	ft_strlen(check_var(line + i + 1)));
+	if (ft_strcmp(var + 1, "OLDPWD") == 0)
 		value = ft_strdup(mini->oldpwd);
-	else if (ft_strcmp(var, "PWD") == 0)
+	else if (ft_strcmp(var + 1, "PWD") == 0)
 		value = ft_strdup(mini->pwd);
 	else
-		value = find_var(var, mini->env);
+		value = find_var(var + 1, mini->env);
 	line = ft_replace(line, var, value, i);
+	if (var)
+		free(var);
 	return (line);
 }
 
@@ -36,6 +40,10 @@ char	*expand_exit(char *line, t_minishell *mini, int i)
 	var = ft_strdup("$?");
 	value = ft_itoa(mini->status);
 	line = ft_replace(line, var, value, i);
+	if (var)
+		free(var);
+	if (value)
+		free(value);
 	return (line);
 }
 

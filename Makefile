@@ -22,6 +22,7 @@ SRCS =  src/builtins/cd.c		\
 		src/parser/tokenizer/split_utils.c \
 		src/parser/tokenizer/tokens.c \
 		src/parser/tokenizer/value_check.c \
+		src/parser/tokenizer/merge_add.c \
 		src/parser/redirections/redir.c \
 		src/parser/expander/expander.c \
 		src/parser/expander/expander_utils.c \
@@ -34,6 +35,7 @@ SRCS =  src/builtins/cd.c		\
 		src/utils/utils.c \
 		src/builtins/export_utils.c \
 		src/builtins/export_utils2.c \
+		tests/test.c \
         main.c
 
 SRC_DIR = src/

@@ -6,50 +6,43 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 17:19:16 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 19:17:06 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/30 17:20:43 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-t_tokens	*idtokens(t_tokens *list, t_minishell *minishell)
+void	assign_type(t_tokens *node)
 {
-	t_tokens	*node;
+	const static t_type	type[128] = {\
+		['|'] = PIPE, \
+		['<'] = RDIN, \
+		['>'] = RDOUT, \
+		[' '] = WHITE
+	};
 
-	node = list;
 	while (node)
 	{
-		if (node->quote == 1 || node->quote == 2)
-			node->type = WORD;
-		else if (ft_strlen(node->value) == 1)
-		{
-			if (node->value[0] == '|')
-				node->type = PIPE;
-			else if (node->value[0] == '<')
-				node->type = RDIN;
-			else if (node->value[0] == '>')
-				node->type = RDOUT;
-			else if (node->value[0] == ' ')
-				node->type = WHITE;
-			else
-				node->type = WORD;
-		}
+		node->type = WORD;
+		if (ft_strlen(node->value) == 1)
+				node->type = type[(int)node->value[0]];
 		else if (ft_strlen(node->value) == 2)
 		{
 			if (ft_strcmp(node->value, ">>") == 0)
 				node->type = RDAPPND;
 			else if (ft_strcmp(node->value, "<<") == 0)
 				node->type = RDHDOC;
-			else
-				node->type = WORD;
 		}
-		else
-			node->type = WORD;
 		node = node->next;
 	}
+}
+
+t_tokens	*idtokens(t_tokens *list, t_minishell *minishell)
+{
+	assign_type(list);
 	list = expand(list, minishell);
 	combine_words(list);
-	remove_white(list);
+	list = remove_white(list);
 	list = idword(list);
 	return (list);
 }

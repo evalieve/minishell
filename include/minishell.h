@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/26 18:49:25 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/30 18:04:15 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,9 +210,10 @@ int	ft_strcmp(const char *s1, const char *s2);
 t_cmds	*tokenize(t_minishell *minishell);
 void printmini(t_minishell *mini);
 t_tokens *idword(t_tokens *tokens);
-void    remove_white(t_tokens *head);
+t_tokens	*remove_white(t_tokens *head);
 t_cmds *parse(t_tokens *tokens);
 char **ft_addargs(t_tokens *tokens);
+char	**alloc_args(char **args, int size);
 t_tokens *idtokens(t_tokens *list, t_minishell *minishell);
 t_tokens *mergetokens(t_tokens *list);
 int	compvalue(t_tokens *list, t_tokens *next);
@@ -238,6 +239,10 @@ int	ft_memcmp(const void *str1, const void *str2, size_t n);
 bool	iswhspace(char *str);
 bool ft_isabsolute(char *command);
 bool ft_checkbi(char *command);
+t_tokens	*comp_merge(t_tokens *node);
+void	assign_type(t_tokens *node);
+t_tokens	*split_delim(t_tokens *last, char *new, char *rest);
+t_cmds	*parse_loop(t_tokens *tokens, t_cmds *list);
 
 /* REDIRECTIONS */
 char	*heredoc_loop(char *line, t_cmds *node);
@@ -303,5 +308,8 @@ bool	equal_sign_exist(char *arg);
 bool	key_exist(t_env *env, char *arg);
 bool	validate_key(char *arg);
 void	change_value(t_env *env, char *arg);
+
+void	printlist(t_tokens *list);
+void	printnode(t_cmds *node);
 
 #endif
