@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:57:32 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 18:58:52 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/30 16:25:17 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ void	free_node(t_cmds *node)
 			free_args(tmp->args);
 		if (tmp->redir)
 			free_redir(tmp->redir);
-		free(tmp);
+		if (tmp)
+			free(tmp);
 	}
 }
 

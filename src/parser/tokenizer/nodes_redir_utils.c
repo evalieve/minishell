@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 16:50:46 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 19:43:36 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/30 16:24:16 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_redir	*ft_redirnew(char *file, t_type type)
 	new = malloc(sizeof(t_redir));
 	if (!new)
 		return (NULL);
-	new->file = file;
+	new->file = ft_strdup(file);
 	new->type = type;
 	new->next = NULL;
 	new->prev = NULL;

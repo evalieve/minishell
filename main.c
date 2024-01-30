@@ -1,4 +1,19 @@
-#include "include/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/01/29 13:50:12 by evalieve      #+#    #+#                 */
+/*   Updated: 2024/01/30 16:25:54 by evalieve      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "./include/minishell.h"
+// #include "include/minishell.h"
+// #include <minishell.h>
+
 
 void password()
 {
@@ -18,6 +33,7 @@ void password()
 		ft_putstr_fd("            '-' \n\n", 1);
 		exit(1);
 	}
+	free(password);
 }
 
 void	wait_for_child(t_minishell *minishell)
@@ -41,14 +57,15 @@ void	wait_for_child(t_minishell *minishell)
 int main(int argc, char *argv[], char *envp[])
 {
 	t_minishell *minishell;
+	int			e_status;
 
 	(void) argc;
 	(void) argv;
 	minishell = init_struct(envp);
 	if (!minishell)
 		return (ERROR);
-	// password();
-	while (minishell->exit == false) // wanneer wordt deze op true gezet?
+	password();
+	while (!minishell->exit)
 	{
 		signals(S_PARENT);
 		minishell->line = readline("minishell$ ");
@@ -58,13 +75,16 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			add_history(minishell->line);
 			minishell->cmds = tokenize(minishell);
-			if (!minishell->cmds)
-				continue ;
-			executor(minishell);
-			wait_for_child(minishell);
+			if (minishell->cmds)
+			{
+				executor(minishell);
+				wait_for_child(minishell);
+			}
 		}
-		// clean_shell(minishell);
+		clean_shell(minishell);
 	}
-	// free_struct(minishell);
-	return (SUCCESS);
+	e_status = minishell->status;
+	clear_history();
+	free_mini_struct(minishell);
+	return (e_status);
 }

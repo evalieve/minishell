@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/21 13:55:31 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 19:53:23 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/29 13:28:13 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,8 @@ void	handle_redir(t_cmds *node)
 			handle_red_in1(node, tmp);
 			if (node->fd_in == ERROR)
 			{
-				if (node->fd_out != STDOUT_FILENO) // bij error moet hij ook de out file sluiten mits deze bestaat en geopend is
-					ft_close(node->fd_out);
-				// printf("error RDIN\n");
-				return ; // hij moet stoppen met de rest van de files openen na error met permissions
+				if (node->fd_out != STDOUT_FILENO)
+					return ;
 			}
 		}
 		else if (tmp->type == RDOUT || tmp->type == RDAPPND)
@@ -81,10 +79,9 @@ void	handle_redir(t_cmds *node)
 			handle_red_out1(node, tmp);
 			if (node->fd_out == ERROR)
 			{
-				if (node->fd_in != STDIN_FILENO) // bij error moet hij ook de in file sluiten mits deze bestaat en geopend is
+				if (node->fd_in != STDIN_FILENO)
 					ft_close(node->fd_in);
-				// printf("error RDOUT\n");
-				return ; // hij moet stoppen met de rest van de files openen na error met permissions
+				return ;
 			}
 		}
 		tmp = tmp->next;

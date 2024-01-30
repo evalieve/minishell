@@ -6,12 +6,11 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:47 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/16 19:19:58 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 16:50:18 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include <minishell.h>
-#include "../../include/minishell.h"
+#include <minishell.h>
 
 char	*split_value(char *envp)
 {
@@ -89,8 +88,19 @@ t_minishell	*init_struct(char *envp[])
 	minishell = (t_minishell *)ft_malloc(sizeof(t_minishell));
 	minishell->env = env_init(envp);
 	minishell->pwd = ft_strdup(return_value(minishell->env, "PWD"));
+	if (ft_strcmp(minishell->pwd, "") == SUCCESS)
+	{
+		free(minishell->pwd);
+		minishell->pwd = getcwd(NULL, 0);
+	}
+	if (!minishell->pwd)
+		fatal("getcwd: cannot access parent directories", NULL);
+	minishell->cwd = ft_strdup(minishell->pwd);
 	minishell->oldpwd = ft_strdup(return_value(minishell->env, "OLDPWD"));
 	minishell->status = 0;
-	minishell->exit = false; // TODO: check if this is necessary
+	minishell->exit = false;
+	minishell->line = NULL;
+	minishell->cmds = NULL;
+	minishell->simple = false;
 	return (minishell);
 }

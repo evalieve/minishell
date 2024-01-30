@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:35 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/17 11:27:45 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/30 17:54:14 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,27 +24,6 @@ bool	semicolumn(char *str)
 		i++;
 	}
 	return (false);
-}
-
-long long	str_to_num(char *str)
-{
-	long long	result;
-	int			changed;
-	int			i;
-
-	result = 0;
-	i = 0;
-	if (str[0] == '-')
-		i++;
-	while (str[i] && str[i] != ';')
-	{
-		changed = str[i] - '0';
-		result = (result * 10) + changed;
-		i++;
-	}
-	if (str[0] == '-')
-		result = result * -1;
-	return (result);
 }
 
 int	calc_status(int status)
@@ -83,6 +62,31 @@ int	convert_status(char *str)
 	return (status);
 }
 
+bool	exit_check(t_cmds *cmd, t_minishell *minishell, int exit_status)
+{
+	if (exit_status == NON_NUMERIC)
+	{
+		if (minishell->simple)
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
+		error_message("exit", cmd->args[1], "numeric argument required");
+		minishell->status = E_UNKNOWN;
+	}
+	else if (cmd->args[2] && exit_status != OLD_STATUS && \
+			!semicolumn(cmd->args[1]))
+	{
+		error_message("exit", NULL, "too many arguments");
+		minishell->status = E_FAILURE;
+		return (false);
+	}
+	else if (exit_status != OLD_STATUS)
+	{
+		if (minishell->simple)
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
+		minishell->status = exit_status;
+	}
+	return (true);
+}
+
 void	builtin_exit(t_cmds *cmd, t_minishell *minishell)
 {
 	int	exit_status;
@@ -90,24 +94,10 @@ void	builtin_exit(t_cmds *cmd, t_minishell *minishell)
 	if (cmd->args[1])
 	{
 		exit_status = convert_status(cmd->args[1]);
-		if (exit_status == NON_NUMERIC)
-		{
-			ft_putstr_fd("exit\n", STDERR_FILENO);
-			error_message("exit", cmd->args[1], "numeric argument required");
-			minishell->status = E_UNKNOWN;
-		}
-		else if (cmd->args[2] && exit_status != OLD_STATUS && \
-				!semicolumn(cmd->args[1]))
-		{
-			error_message("exit", NULL, "too many arguments");
-			minishell->status = E_FAILURE;
+		if (!exit_check(cmd, minishell, exit_status))
 			return ;
-		}
-		else if (exit_status != OLD_STATUS)
-		{
-			ft_putstr_fd("exit\n", STDERR_FILENO);
-			minishell->status = exit_status;
-		}
 	}
-	exit(minishell->status);
+	else if (!cmd->args[1] && minishell->simple)
+		ft_putstr_fd("exit\n", STDOUT_FILENO);
+	minishell->exit = true;
 }

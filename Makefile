@@ -34,11 +34,13 @@ SRCS =  src/builtins/cd.c		\
 		src/utils/utils.c \
 		src/builtins/export_utils.c \
 		src/builtins/export_utils2.c \
+		src/executor/exec_builtin.c \
+		src/executor/exec_utils.c \
         main.c
 
 SRC_DIR = src/
 OBJ_DIR = obj/
-INCL_DIR = include/
+INCL_DIR = ./include/
 
 OBJ = $(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.c=.o))
 

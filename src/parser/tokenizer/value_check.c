@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 16:46:59 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 19:09:07 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/29 13:29:00 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 bool	ft_checkbi(char *command)
 {
-	if (ft_strcmp(command, "echo") == 0)
+	if (ft_strcmp(command, "echo") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "cd") == 0)
+	else if (ft_strcmp(command, "cd") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "pwd") == 0)
+	else if (ft_strcmp(command, "pwd") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "export") == 0)
+	else if (ft_strcmp(command, "export") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "unset") == 0)
+	else if (ft_strcmp(command, "unset") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "env") == 0)
+	else if (ft_strcmp(command, "env") == SUCCESS)
 		return (true);
-	else if (ft_strcmp(command, "exit") == 0)
+	else if (ft_strcmp(command, "exit") == SUCCESS)
 		return (true);
 	else
 		return (false);
