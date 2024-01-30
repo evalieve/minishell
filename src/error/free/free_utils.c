@@ -6,13 +6,13 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:57:32 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 18:10:33 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/30 18:15:39 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-void free_list(t_tokens *list)
+void	free_list(t_tokens *list)
 {
 	t_tokens	*tmp;
 
