@@ -6,12 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/29 15:03:59 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/29 15:34:17 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/31 12:50:12 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
 
 void	printnode(t_cmds *node)
 {
