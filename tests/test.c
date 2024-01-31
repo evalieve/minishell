@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/29 15:03:59 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/31 12:50:12 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 12:54:52 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	printnode(t_cmds *node)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (node)
