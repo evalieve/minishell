@@ -6,11 +6,11 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/29 13:50:12 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/31 10:54:56 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 13:55:02 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./include/minishell.h"
+#include <minishell.h>
 
 void	password(void)
 {

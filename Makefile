@@ -38,7 +38,7 @@ SRCS =  src/builtins/cd.c \
 		src/parser/tokenizer/value_check.c \
 		src/signals/sig.c \
 		src/utils/utils.c \
-		main.c
+		src/main.c
 
 SRC_DIR = src/
 OBJ_DIR = obj/
@@ -61,7 +61,6 @@ ifdef FSAN
 endif
 
 all : $(LIBFT) $(NAME)
-
 
 $(NAME) : $(OBJ)
 	$(CC) $(INCL) $(CFLAGS) -o $@ $^ $(LIBFT) -lreadline -L/opt/homebrew/opt/readline/lib
