@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:53:31 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 18:55:37 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/31 10:57:58 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include <minishell.h>
 
 pid_t	ft_fork(void)
 {

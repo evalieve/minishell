@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 16:48:42 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 18:59:47 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/31 10:56:54 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include <minishell.h>
 
 void	*ft_malloc(size_t size)
 {

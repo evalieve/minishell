@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 16:57:38 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 18:44:26 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 11:02:52 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 int	closedquote(char *line, char quote)
 {

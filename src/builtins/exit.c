@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:35 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/30 17:54:14 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 12:16:58 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	convert_status(char *str)
 
 	i = 0;
 	if (!str[0] || (str[0] && (str[0] == '#' || str[0] == ';')))
-		return (OLD_STATUS);
+		return (CURRENT_STATUS);
 	if (str[0] == '-' || str[0] == '+')
 		i++;
 	if (!str[i] || str[i] == ';')
@@ -71,14 +71,14 @@ bool	exit_check(t_cmds *cmd, t_minishell *minishell, int exit_status)
 		error_message("exit", cmd->args[1], "numeric argument required");
 		minishell->status = E_UNKNOWN;
 	}
-	else if (cmd->args[2] && exit_status != OLD_STATUS && \
+	else if (cmd->args[2] && exit_status != CURRENT_STATUS && \
 			!semicolumn(cmd->args[1]))
 	{
 		error_message("exit", NULL, "too many arguments");
 		minishell->status = E_FAILURE;
 		return (false);
 	}
-	else if (exit_status != OLD_STATUS)
+	else if (exit_status != CURRENT_STATUS)
 	{
 		if (minishell->simple)
 			ft_putstr_fd("exit\n", STDOUT_FILENO);

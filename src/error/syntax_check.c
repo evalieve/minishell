@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/28 17:31:30 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 18:56:26 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/31 10:56:39 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include <minishell.h>
 
 int	check_syntax(t_tokens *tokens, t_minishell *mini)
 {

@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 17:19:16 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 18:21:29 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 11:01:16 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 void	assign_type(t_tokens *node)
 {

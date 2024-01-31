@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 16:43:26 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/29 16:05:10 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/31 11:03:19 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 char	*ft_strchr_delim(const char *s)
 {

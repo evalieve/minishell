@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 16:48:32 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/26 19:25:21 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/31 11:04:30 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 t_tokens	*ft_lstnew_token(char *content, int quote)
 {

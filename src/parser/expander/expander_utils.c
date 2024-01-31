@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:24:04 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 16:49:07 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/31 10:59:31 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 bool	check_lim(t_tokens *node)
 {

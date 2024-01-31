@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/29 13:50:12 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/30 18:50:08 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 10:54:56 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void) argc;
 	(void) argv;
-	minishell = init_struct(envp);
+	minishell = init_mini_struct(envp);
 	if (!minishell)
 		return (ERROR);
 	password();

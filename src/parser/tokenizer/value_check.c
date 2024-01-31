@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 16:46:59 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/29 13:29:00 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 11:05:00 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 bool	ft_checkbi(char *command)
 {

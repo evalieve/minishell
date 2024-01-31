@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/22 12:05:01 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 16:49:26 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/31 10:59:59 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 char	*expand_var(char *line, t_minishell *mini, int i)
 {

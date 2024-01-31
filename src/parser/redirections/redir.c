@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/21 13:55:31 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 18:34:43 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 11:00:51 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 // heredoc signal! TODO
 char	*heredoc_loop(char *line, t_cmds *node)

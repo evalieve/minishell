@@ -6,13 +6,13 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/29 13:24:25 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/29 13:26:13 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 11:34:12 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static t_builtin	builtin_lookup(char *cmd)
+t_builtin	builtin_lookup(char *cmd)
 {
 	int						i;
 	static const t_builtin	lookup[] = {

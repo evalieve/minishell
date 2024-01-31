@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/29 13:47:25 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/29 13:50:47 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/31 11:01:41 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 char	**alloc_args(char **args, int size)
 {

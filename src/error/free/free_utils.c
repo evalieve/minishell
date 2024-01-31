@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:57:32 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 18:15:39 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 10:55:24 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 void	free_list(t_tokens *list)
 {

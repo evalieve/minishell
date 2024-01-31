@@ -6,11 +6,11 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 17:10:59 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 16:55:18 by marlou        ########   odam.nl         */
+/*   Updated: 2024/01/31 11:02:33 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 t_cmds	*parse_loop(t_tokens *tokens, t_cmds *list)
 {

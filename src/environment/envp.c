@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:47 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/30 16:50:18 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 10:55:15 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_env	*env_init(char *envp[])
 	return (env);
 }
 
-t_minishell	*init_struct(char *envp[])
+t_minishell	*init_mini_struct(char *envp[])
 {
 	t_minishell	*minishell;
 

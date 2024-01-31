@@ -6,11 +6,11 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/30 18:15:31 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 11:03:59 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include <minishell.h>
 
 t_tokens	*split_delim(t_tokens *last, char *new, char *rest)
 {
