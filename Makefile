@@ -13,29 +13,29 @@ SRCS =  src/builtins/cd.c \
 		src/builtins/export.c \
 		src/builtins/pwd.c \
 		src/builtins/unset.c \
-		src/enviroment/envp.c \
+		src/environment/envp.c \
 		src/error/free/free_utils.c \
 		src/error/free/free.c \
 		src/error/fatal.c \
-		src/error/syntax_error.c \
+		src/error/syntax_check.c \
 		src/error/wrap_func.c \
 		src/error/wrap_func2.c \
 		src/executor/exec_builtin.c \
 		src/executor/exec_utils.c \
 		src/executor/exec.c \
-		src/parser/expander/expander_util.c \
+		src/parser/expander/expander_utils.c \
 		src/parser/expander/expander.c \
-		src/redirections/redir_utils.c \
-		src/redirections/redir.c \
-		src/tokenizer/id_tokens.c \
-		src/tokenizer/merge_add.c \
-		src/tokenizer/nodes_redir_utils.c \
-		src/tokenizer/parser.c \
-		src/tokenizer/quotes.c \
-		src/tokenizer/split_utils.c \
-		src/tokenizer/tokenizer.c \
-		src/tokenizer/tokens.c \
-		src/tokenizer/value_check.c \
+		src/parser/redirections/redir_utils.c \
+		src/parser/redirections/redir.c \
+		src/parser/tokenizer/id_tokens.c \
+		src/parser/tokenizer/merge_add.c \
+		src/parser/tokenizer/nodes_redir_utils.c \
+		src/parser/tokenizer/parser.c \
+		src/parser/tokenizer/quotes.c \
+		src/parser/tokenizer/split_utils.c \
+		src/parser/tokenizer/tokenizer.c \
+		src/parser/tokenizer/tokens.c \
+		src/parser/tokenizer/value_check.c \
 		src/signals/sig.c \
 		src/utils/utils.c \
 		main.c
