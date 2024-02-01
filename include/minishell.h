@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/02/01 14:54:34 by marlou        ########   odam.nl         */
+/*   Updated: 2024/02/01 16:36:25 by mkootstr      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,7 @@ int			handle_redir_out_loop(t_cmds *node, t_redir *tmp);
 
 // redir
 int			wait_for_heredoc(pid_t pid, t_minishell *minishell);
-int			heredoc_loop(t_cmds *node, t_minishell *minishell);
+int			heredoc_loop(t_cmds *node, t_redir *redir, t_minishell *minishell);
 int			handle_red_in(t_cmds *node, t_redir *redir, t_minishell *minishell);
 int			handle_red_out(t_cmds *node, t_redir *redir);
 int			handle_redir(t_cmds *node, t_minishell *minishell);

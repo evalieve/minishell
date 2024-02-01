@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/21 13:55:31 by marlou        #+#    #+#                 */
-/*   Updated: 2024/02/01 14:29:50 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/01 16:40:52 by mkootstr      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	wait_for_heredoc(pid_t pid, t_minishell *minishell)
 	return (E_SUCCESS);
 }
 
-int	heredoc_loop(t_cmds *node, t_minishell *minishell)
+int	heredoc_loop(t_cmds *node, t_redir *redir, t_minishell *minishell)
 {
 	char	*line;
 	pid_t	pid;
@@ -41,7 +41,7 @@ int	heredoc_loop(t_cmds *node, t_minishell *minishell)
 		while (1)
 		{
 			line = readline("heredoc> ");
-			if (line && ft_strcmp(line, node->redir->file) != SUCCESS)
+			if (line && ft_strcmp(line, redir->file) != SUCCESS)
 			{
 				ft_putstr_fd(line, node->pipe[1]);
 				ft_putchar_fd('\n', node->pipe[1]);
@@ -67,7 +67,7 @@ int	handle_red_in(t_cmds *node, t_redir *redir, t_minishell *minishell)
 	else if (redir->type == RDHDOC)
 	{
 		ft_pipe(node->pipe);
-		e_status = heredoc_loop(node, minishell);
+		e_status = heredoc_loop(node, redir, minishell);
 		node->fd_in = node->pipe[0];
 		ft_close(node->pipe[1]);
 	}
