@@ -6,11 +6,11 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/02/01 00:54:33 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/01 14:55:57 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "../../../include/minishell.h"
 
 t_tokens	*split_delim(t_tokens *last, char *new, char *rest)
 {
@@ -25,7 +25,7 @@ t_tokens	*split_delim(t_tokens *last, char *new, char *rest)
 		{
 			rest = ft_strchr_delim(last->value);
 			new = ft_substr(last->value, 0, \
-					ft_strlen(last->value) - ft_strlen(rest));
+			ft_strlen(last->value) - ft_strlen(rest));
 		}
 		if (ft_strlen(rest) > 0)
 			ft_lstadd(last, ft_lstnew_token(ft_strdup(rest), 0));
@@ -59,7 +59,7 @@ t_tokens	*split_input(t_tokens *old)
 t_tokens	*split_tokens(t_tokens *list)
 {
 	while (list->prev)
-		list = list->prev;
+			list = list->prev;
 	while (1)
 	{
 		if (list->quote == 0)
@@ -91,7 +91,7 @@ t_cmds	*tokenize(t_minishell *minishell)
 	list = split_tokens(list);
 	list = mergetokens(ft_lstfirst(list));
 	list = idtokens(list, minishell);
-	if (check_syntax(list, minishell) == 1)
+	if (check_syntax(list) == 1)
 	{
 		minishell->status = E_SYNTAX_ERROR;
 		return (NULL);

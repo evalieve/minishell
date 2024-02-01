@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/02/01 01:28:40 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/01 14:54:34 by marlou        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,10 @@ void		non_fatal(char *str, char *pstr);
 void		error_message(char *cmd, char *arg, char *message);
 
 // syntax_check
-int			check_syntax(t_tokens *tokens, t_minishell *mini);
+int			check_syntax(t_tokens *tokens);
+int			check_pipe_syntax(t_tokens *tokens);
+bool		check_redir_type(int type);
+int			check_redir_syntax(t_tokens *tokens);
 
 // wrap_func
 void		*ft_malloc(size_t size);
