@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/21 13:55:31 by marlou        #+#    #+#                 */
-/*   Updated: 2024/02/01 14:20:26 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/01 14:29:50 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,16 @@ int	wait_for_heredoc(pid_t pid, t_minishell *minishell)
 	if (WEXITSTATUS(e_status) == E_SIGINT)
 	{
 		minishell->status = E_FAILURE;
-		return (E_SIGINT); //?
+		return (E_SIGINT);
 	}
-	// printf("status: %d\n", e_status);
-	// if (WEXITSTATUS(e_status) == E_SUCCESS)
-	// {
-	// 	minishell->status = E_SUCCESS;
-	// 	return (E_SUCCESS);
-	// }
-	// return (E_FAILURE); // ? 
-	//vgm kan ik gewoon bij sigint 
-	// if doen en anders success returnen altijd
 	minishell->status = E_SUCCESS;
 	return (E_SUCCESS);
 }
 
 int	heredoc_loop(t_cmds *node, t_minishell *minishell)
 {
-	char *line;
-	pid_t pid;
+	char	*line;
+	pid_t	pid;
 
 	line = NULL;
 	signals(S_IGNORE);
@@ -64,7 +55,7 @@ int	heredoc_loop(t_cmds *node, t_minishell *minishell)
 
 int	handle_red_in(t_cmds *node, t_redir *redir, t_minishell *minishell)
 {
-	int e_status;
+	int	e_status;
 
 	e_status = E_SUCCESS;
 	if (redir->type == RDIN)
@@ -99,7 +90,7 @@ int	handle_red_out(t_cmds *node, t_redir *redir)
 	return (e_status);
 }
 
-int		handle_redir(t_cmds *node, t_minishell *minishell)
+int	handle_redir(t_cmds *node, t_minishell *minishell)
 {
 	t_redir	*tmp;
 	int		e_status;
