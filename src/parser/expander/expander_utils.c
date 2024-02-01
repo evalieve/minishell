@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:24:04 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/31 10:59:31 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/01 14:23:55 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ char	*ft_replace(char *line, char *var, char *value, int start)
 		ft_append(&newline, line + start + ft_strlen(var), \
 		len - ft_strlen(newline));
 	}
+	free(line);
 	return (newline);
 }
 
