@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 17:10:59 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/31 11:02:33 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/01 11:24:21 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_cmds	*parse_loop(t_tokens *tokens, t_cmds *list)
 	return (list);
 }
 
-t_cmds	*parse(t_tokens *tokens)
+t_cmds	*parse(t_tokens *tokens, t_minishell *minishell)
 {
 	t_cmds	*list;
 
@@ -49,7 +49,12 @@ t_cmds	*parse(t_tokens *tokens)
 			list = parse_loop(tokens, list);
 			tokens = tokens->next;
 		}
-		handle_redir(list);
+		if (handle_redir(list, minishell) == E_SIGINT)
+		{
+			// printf("SIGINT\n");
+			free_node(list);
+			return (NULL);
+		}
 		if (tokens)
 			tokens = tokens->next;
 	}

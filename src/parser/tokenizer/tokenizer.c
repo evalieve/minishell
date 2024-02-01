@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/01/31 11:03:59 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/01 00:54:33 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_cmds	*tokenize(t_minishell *minishell)
 		minishell->status = E_SYNTAX_ERROR;
 		return (NULL);
 	}
-	minishell->cmds = parse(list);
+	minishell->cmds = parse(list, minishell);
 	free_list(list);
 	return (minishell->cmds);
 }

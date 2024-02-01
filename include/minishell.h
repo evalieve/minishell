@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/31 12:16:51 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/01 01:28:40 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@
 # define UNSET -4
 
 # define CD_E_MESSAGE "cd: error retrieving current directory: " 
-# define CWD_E_MESSAGE "getcwd: cannot access parent directories:"
+# define CWD_E_MESSAGE "getcwd: cannot access parent directories: "
 
 typedef enum e_signal
 {
 	S_PARENT,
 	S_CHILD,
 	S_HEREDOC,
+	S_IGNORE,
 }				t_signal;
 
 typedef enum e_word
@@ -71,6 +72,7 @@ typedef enum e_status
 {
 	E_ERROR = -1,
 	E_SUCCESS = 0,
+	E_CTRL_D = 0,
 	E_FAILURE = 1,
 	E_COMMAND_NOT_FOUND = 127,
 	E_NO_SUCH_FILE_OR_DIRECTORY = 127,
@@ -276,14 +278,15 @@ char		*ft_expand(char *line, t_minishell *mini);
 t_tokens	*expand(t_tokens *list, t_minishell *mini);
 
 // redir_utils
-bool		handle_redir_in_loop(t_cmds *node, t_redir *tmp);
-bool		handle_redir_out_loop(t_cmds *node, t_redir *tmp);
+int			handle_redir_in_loop(t_cmds *node, t_redir *tmp, t_minishell *mini);
+int			handle_redir_out_loop(t_cmds *node, t_redir *tmp);
 
 // redir
-char		*heredoc_loop(char *line, t_cmds *node);
-void		handle_red_in(t_cmds *node, t_redir *redir);
-void		handle_red_out(t_cmds *node, t_redir *redir);
-void		handle_redir(t_cmds *node);
+int			wait_for_heredoc(pid_t pid, t_minishell *minishell);
+int			heredoc_loop(t_cmds *node, t_minishell *minishell);
+int			handle_red_in(t_cmds *node, t_redir *redir, t_minishell *minishell);
+int			handle_red_out(t_cmds *node, t_redir *redir);
+int			handle_redir(t_cmds *node, t_minishell *minishell);
 
 // id_tokens
 void		assign_type(t_tokens *node);
@@ -306,7 +309,7 @@ t_redir		*ft_rediradd(t_redir *head, t_redir *new);
 
 // parser
 t_cmds		*parse_loop(t_tokens *tokens, t_cmds *list);
-t_cmds		*parse(t_tokens *tokens);
+t_cmds		*parse(t_tokens *tokens, t_minishell *minishell);
 
 // quotes
 int			closedquote(char *line, char quote);
@@ -340,7 +343,7 @@ bool		is_delim(char c);
 
 /* SIGNALS */
 // sig
-void		signal_ctrl_d(void);
+void		signal_ctrl_d(t_minishell *minishell);
 void		signal_heredoc(int signum);
 void		signal_child(int signum);
 void		signal_parent(int signum);

@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/08 17:55:46 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/30 18:45:19 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 15:25:19 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	free_double_char(char **str)
 	i = 0;
 	while (str[i])
 	{
-		free(str[i]);
+		if (str[i])
+			free(str[i]);
 		i++;
 	}
 	free(str);

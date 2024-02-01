@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:49 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/31 11:34:02 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/01 14:01:52 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,31 +93,30 @@ void	exec_commands_loop(t_minishell *minishell)
 
 	tmp = minishell->cmds;
 	exec.prev_read = 0;
-	if (tmp->next)
+	while (tmp)
 	{
-		minishell->simple = false;
-		while (tmp)
+		if (tmp->cmd)
 		{
-			if (tmp->cmd)
-			{
-				exec_pipe(tmp, &exec, minishell);
-				if (exec.prev_read)
-					ft_close(exec.prev_read);
-				exec.prev_read = exec.pipe[READ_END];
-				ft_close(exec.pipe[WRITE_END]);
-			}
-			close_fds(tmp);
-			tmp = tmp->next;
+			exec_pipe(tmp, &exec, minishell);
+			if (exec.prev_read)
+				ft_close(exec.prev_read);
+			exec.prev_read = exec.pipe[READ_END];
+			ft_close(exec.pipe[WRITE_END]);
 		}
-		ft_close(exec.pipe[READ_END]);
+		close_fds(tmp);
+		tmp = tmp->next;
 	}
+	ft_close(exec.pipe[READ_END]);
 }
 
 void	executor(t_minishell *minishell)
 {
 	if (minishell->cmds && minishell->cmds->next)
+	{
+		minishell->simple = false;
 		exec_commands_loop(minishell);
-	else if (minishell->cmds)
+	}
+	else if (minishell->cmds && minishell->cmds->cmd)
 	{
 		minishell->simple = true;
 		exec_simple(minishell->cmds, minishell);

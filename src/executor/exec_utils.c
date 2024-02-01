@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/29 13:20:21 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/30 17:29:12 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 15:20:45 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ char	*find_cmd_path(char **paths, char *cmd)
 		path = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (access(path, X_OK) == SUCCESS)
-			break ;
+			return (path);
 		free(path);
 		i++;
 	}
-	return (path);
+	return (NULL);
 }
 
 char	*get_path(char *cmd, t_env *env)

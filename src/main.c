@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/29 13:50:12 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/31 13:55:02 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/01 14:19:06 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,23 @@ void	password(void)
 		ft_putstr_fd("        '.'.-.-,_.'.'\n", 1);
 		ft_putstr_fd("          '(  (..-'\n", 1);
 		ft_putstr_fd("            '-' \n\n", 1);
-		exit(1);
+		exit(-42);
 	}
 	free(password);
+}
+
+bool	empty_input(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] != ' ' && line[i] != '\t')
+			return (false);
+		i++;
+	}
+	return (true);
 }
 
 void	wait_for_child(t_minishell *minishell)
@@ -48,7 +62,10 @@ void	wait_for_child(t_minishell *minishell)
 	if (ptr->pid != UNSET)
 	{
 		ft_waitpid(ptr->pid, &status, 0);
-		minishell->status = WEXITSTATUS(status);
+		if (status == SIGINT)
+			minishell->status = E_SIGINT;
+		else
+			minishell->status = WEXITSTATUS(status);
 	}
 }
 
@@ -59,8 +76,8 @@ void	start_minishell(t_minishell *minishell)
 		signals(S_PARENT);
 		minishell->line = readline("minishell$ ");
 		if (!minishell->line)
-			signal_ctrl_d();
-		if (ft_strcmp(minishell->line, "") != SUCCESS)
+			signal_ctrl_d(minishell);
+		else if (!empty_input(minishell->line))
 		{
 			add_history(minishell->line);
 			minishell->cmds = tokenize(minishell);

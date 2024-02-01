@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:28 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/31 12:07:29 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/01/31 15:30:54 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	change_pwds(t_minishell *minishell)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		ft_putstr_fd("minishell:", STDERR_FILENO);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(CD_E_MESSAGE, STDERR_FILENO);
 		ft_putstr_fd(CWD_E_MESSAGE, STDERR_FILENO);
 		perror(NULL);
