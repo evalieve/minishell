@@ -6,37 +6,45 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:49 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/02/01 14:01:52 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/02 12:26:39 by mkootstr      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	exec_command(t_cmds *cmd, t_minishell *minishell)
+void    exec_command(t_cmds *cmd, t_minishell *minishell)
 {
-	char	*path;
-	char	**envp;
+    char    *path;
+    char    **envp;
 
-	envp = env_to_envp(minishell->env);
-	if (cmd->absolute)
-		path = ft_strdup(cmd->cmd);
-	else
-		path = get_path(cmd->cmd, minishell->env);
-	if (!path && key_exist(minishell->env, "PATH"))
-	{
-		free_double_char(envp);
-		error_message(cmd->cmd, NULL, "command not found");
-		exit(E_COMMAND_NOT_FOUND);
-	}
-	if (access(path, X_OK) == ERROR)
-	{
-		free_double_char(envp);
-		if (path)
-			free(path);
-		error_message(cmd->cmd, NULL, "No such file or directory");
-		exit(E_NO_SUCH_FILE_OR_DIRECTORY);
-	}
-	ft_execve(path, cmd->args, envp);
+    envp = env_to_envp(minishell->env);
+    if (cmd->absolute)
+        path = ft_strdup(cmd->cmd);
+    else
+        path = get_path(cmd->cmd, minishell->env);
+    if (!path && key_exist(minishell->env, "PATH"))
+    {
+        free_double_char(envp);
+        error_message(cmd->cmd, NULL, "command not found");
+        exit(E_COMMAND_NOT_FOUND);
+    }
+    if (access(path, F_OK) == ERROR)
+    {
+        free_double_char(envp);
+        if (path)
+            free(path);
+        error_message(cmd->cmd, NULL, "No such file or directory");
+        exit(E_NO_SUCH_FILE_OR_DIRECTORY);
+    }
+    if (access(path, X_OK) == ERROR)
+    {
+        free_double_char(envp);
+        if (path)
+            free(path);
+        error_message(cmd->cmd, NULL, "Permission denied");
+        exit(E_NO_SUCH_FILE_OR_DIRECTORY);
+    }
+    ft_execve(path, cmd->args, envp);
 }
 
 void	exec_pipe(t_cmds *cmds, t_exec *exec, t_minishell *minishell)

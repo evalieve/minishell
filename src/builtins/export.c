@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:36 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/30 18:02:16 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/02 12:25:31 by mkootstr      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	export_variables(t_cmds *cmd, t_minishell *minishell, int i)
 	}
 	else if (!key_exist(minishell->env, cmd->args[i]))
 	{
-		add_to_env(minishell->env, cmd->args[i], \
+		add_to_env(minishell, cmd->args[i], \
 					equal_sign_exist(cmd->args[i]));
 		check_for_pwd_and_oldpwd(minishell, cmd->args[i], \
 									equal_sign_exist(cmd->args[i]));

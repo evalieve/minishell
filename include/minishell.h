@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/02/01 16:36:25 by mkootstr      ########   odam.nl         */
+/*   Updated: 2024/02/02 12:30:55 by mkootstr      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ char		*get_key(char *arg);
 char		*get_value(char *arg);
 
 // export_utils2
-void		add_to_env(t_env *env, char *arg, bool equal_sign);
+void		add_to_env(t_minishell *minishell, char *arg, bool equal_sign);
 void		set_working_dir(t_minishell *minishell, char *arg_key, char *arg);
 void		adopt_wd_value_from_struct(t_minishell *minishell, char *arg_key);
 void		check_for_pwd_and_oldpwd(t_minishell *minishell, \
@@ -249,14 +249,16 @@ int			ft_dup2(int fd1, int fd2);
 int			ft_execve(char *path, char **argv, char **envp);
 
 /* EXECUTOR */
-// exec_builtin
-t_builtin	builtin_lookup(char *cmd);
-void		exec_builtin(t_cmds *cmd, t_minishell *minishell);
-
 // exec_utils
 char		**env_to_envp(t_env *env);
 void		close_fds(t_cmds *cmd);
 char		*find_cmd_path(char **paths, char *cmd);
+char		*get_path(char *cmd, t_env *env);
+int			redirect(t_cmds *cmd);
+
+// exec_builtin
+t_builtin	builtin_lookup(char *cmd);
+void		exec_builtin(t_cmds *cmd, t_minishell *minishell);
 char		*get_path(char *cmd, t_env *env);
 int			redirect(t_cmds *cmd);
 

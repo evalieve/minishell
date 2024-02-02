@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:31 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/01/25 15:12:16 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/02 12:24:24 by mkootstr      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	builtin_echo(t_cmds *cmd, t_minishell *minishell)
 	i = 1;
 	if (!cmd->args[i])
 		return (ft_putchar_fd('\n', fd));
-	if (is_flag(cmd->args[i]))
+	while (is_flag(cmd->args[i]))
 	{
 		flag = true;
 		i++;
