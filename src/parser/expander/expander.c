@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/22 12:05:01 by marlou        #+#    #+#                 */
-/*   Updated: 2024/02/01 14:24:19 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/02 13:55:40 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_tokens	*expand(t_tokens *list, t_minishell *mini)
 	while (tokens)
 	{
 		if (check_lim(tokens) == 0 && \
-		tokens->type == WORD && tokens->quote != 1)
+		tokens->type == WORD && tokens->quote != '\'')
 			tokens->value = ft_expand(tokens->value, mini);
 		tokens = tokens->next;
 	}

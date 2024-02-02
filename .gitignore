@@ -3,3 +3,5 @@
 *.txt
 *.a
 minishell
+tests
+maintest.c

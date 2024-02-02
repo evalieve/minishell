@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/29 13:47:25 by marlou        #+#    #+#                 */
-/*   Updated: 2024/01/31 11:01:41 by evalieve      ########   odam.nl         */
+/*   Updated: 2024/02/02 13:56:09 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,13 @@ t_tokens	*comp_merge(t_tokens *node)
 		free(node->value);
 		node->value = ft_strdup(" ");
 		if (iswhspace(node->next->value) == 0 && node->next->quote == 0)
+		{
 			ft_lstremove(node->next);
-		if (node->next && iswhspace(node->next->value) != 0)
+			if (node->next == NULL)
+				return (node);
+		}
+		if (node->next && (iswhspace(node->next->value) != 0 || \
+		node->next->quote != 0))
 			node = node->next;
 	}
 	else

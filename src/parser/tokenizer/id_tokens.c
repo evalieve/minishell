@@ -6,7 +6,7 @@
 /*   By: marlou <marlou@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/26 17:19:16 by marlou        #+#    #+#                 */
-/*   Updated: 2024/02/01 15:03:38 by mkootstr      ########   odam.nl         */
+/*   Updated: 2024/02/02 13:55:55 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	assign_type(t_tokens *node)
 	while (node)
 	{
 		node->type = WORD;
-		if (ft_strlen(node->value) == 1)
+		if (ft_strlen(node->value) == 1 && node->quote == 0)
 			node->type = type[(int)node->value[0]];
 		else if (ft_strlen(node->value) == 2)
 		{

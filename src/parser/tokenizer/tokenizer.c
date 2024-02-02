@@ -6,7 +6,7 @@
 /*   By: mkootstr <mkootstr@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/13 16:46:39 by mkootstr      #+#    #+#                 */
-/*   Updated: 2024/02/01 14:55:57 by marlou        ########   odam.nl         */
+/*   Updated: 2024/02/02 14:06:36 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_tokens	*split_input(t_tokens *old)
 t_tokens	*split_tokens(t_tokens *list)
 {
 	while (list->prev)
-			list = list->prev;
+		list = list->prev;
 	while (1)
 	{
 		if (list->quote == 0)

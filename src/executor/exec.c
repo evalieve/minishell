@@ -6,54 +6,33 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:31:49 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/02/02 12:26:39 by mkootstr      ########   odam.nl         */
+/*   Updated: 2024/02/02 14:13:53 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void    exec_command(t_cmds *cmd, t_minishell *minishell)
+void	exec_command(t_cmds *cmd, t_minishell *minishell)
 {
-    char    *path;
-    char    **envp;
+	char	*path;
+	char	**envp;
 
-    envp = env_to_envp(minishell->env);
-    if (cmd->absolute)
-        path = ft_strdup(cmd->cmd);
-    else
-        path = get_path(cmd->cmd, minishell->env);
-    if (!path && key_exist(minishell->env, "PATH"))
-    {
-        free_double_char(envp);
-        error_message(cmd->cmd, NULL, "command not found");
-        exit(E_COMMAND_NOT_FOUND);
-    }
-    if (access(path, F_OK) == ERROR)
-    {
-        free_double_char(envp);
-        if (path)
-            free(path);
-        error_message(cmd->cmd, NULL, "No such file or directory");
-        exit(E_NO_SUCH_FILE_OR_DIRECTORY);
-    }
-    if (access(path, X_OK) == ERROR)
-    {
-        free_double_char(envp);
-        if (path)
-            free(path);
-        error_message(cmd->cmd, NULL, "Permission denied");
-        exit(E_NO_SUCH_FILE_OR_DIRECTORY);
-    }
-    ft_execve(path, cmd->args, envp);
+	if (cmd->absolute)
+		path = ft_strdup(cmd->cmd);
+	else
+		path = get_path(cmd->cmd, minishell->env);
+	exec_command_path_error(minishell, cmd, path);
+	envp = env_to_envp(minishell->env);
+	ft_execve(path, cmd->args, envp);
 }
 
 void	exec_pipe(t_cmds *cmds, t_exec *exec, t_minishell *minishell)
 {
-	signals(S_CHILD);
 	ft_pipe(exec->pipe);
 	cmds->pid = ft_fork();
 	if (cmds->pid == CHILD)
 	{
+		signals(S_CHILD);
 		if (exec->prev_read)
 		{
 			ft_dup2(exec->prev_read, STDIN_FILENO);
@@ -82,10 +61,11 @@ void	exec_simple(t_cmds *cmd, t_minishell *minishell)
 		exec_builtin(cmd, minishell);
 	else
 	{
-		signals(S_CHILD);
+		signals(S_IGNORE);
 		minishell->cmds->pid = ft_fork();
 		if (minishell->cmds->pid == CHILD)
 		{
+			signals(S_CHILD);
 			if (redirect(cmd) == FAILURE)
 				exit(E_FAILURE);
 			exec_command(cmd, minishell);
@@ -101,6 +81,7 @@ void	exec_commands_loop(t_minishell *minishell)
 
 	tmp = minishell->cmds;
 	exec.prev_read = 0;
+	signals(S_IGNORE);
 	while (tmp)
 	{
 		if (tmp->cmd)

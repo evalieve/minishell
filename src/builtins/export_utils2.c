@@ -6,36 +6,36 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/01/25 15:29:07 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/02/02 12:25:06 by mkootstr      ########   odam.nl         */
+/*   Updated: 2024/02/02 14:12:27 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void    add_to_env(t_minishell *minishell, char *arg, bool equal_sign)
+void	add_to_env(t_minishell *minishell, char *arg, bool equal_sign)
 {
-    t_env   *ptr;
-    t_env   *new;
+	t_env	*ptr;
+	t_env	*new;
 
-    ptr = minishell->env;
-    new = (t_env *)ft_malloc(sizeof(t_env));
-    new->key = get_key(arg);
-    new->equal_sign = equal_sign;
-    if (!new->equal_sign)
-        new->value = NULL;
-    else
-        new->value = get_value(arg);
-    new->next = NULL;
-    new->prev = NULL;
-    if (!minishell->env)
-        minishell->env = new;
-    else
-    {
-        while (ptr->next)
-            ptr = ptr->next;
-        ptr->next = new;
-        new->prev = ptr;
-    }
+	ptr = minishell->env;
+	new = (t_env *)ft_malloc(sizeof(t_env));
+	new->key = get_key(arg);
+	new->equal_sign = equal_sign;
+	if (!new->equal_sign)
+		new->value = NULL;
+	else
+		new->value = get_value(arg);
+	new->next = NULL;
+	new->prev = NULL;
+	if (!minishell->env)
+		minishell->env = new;
+	else
+	{
+		while (ptr->next)
+			ptr = ptr->next;
+		ptr->next = new;
+		new->prev = ptr;
+	}
 }
 
 void	set_working_dir(t_minishell *minishell, char *arg_key, char *arg)

@@ -20,7 +20,7 @@ SRCS =  src/builtins/cd.c \
 		src/error/syntax_check.c \
 		src/error/wrap_func.c \
 		src/error/wrap_func2.c \
-		src/executor/exec_builtin.c \
+		src/executor/exec_builtin_etc.c \
 		src/executor/exec_utils.c \
 		src/executor/exec.c \
 		src/parser/expander/expander_utils.c \

@@ -6,7 +6,7 @@
 /*   By: evalieve <evalieve@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/06 11:33:39 by evalieve      #+#    #+#                 */
-/*   Updated: 2024/02/02 12:30:55 by mkootstr      ########   odam.nl         */
+/*   Updated: 2024/02/02 14:13:19 by evalieve      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,7 @@ char		*get_path(char *cmd, t_env *env);
 int			redirect(t_cmds *cmd);
 
 // exec_builtin
+void		exec_command_path_error(t_minishell *mini, t_cmds *cmd, char *path);
 t_builtin	builtin_lookup(char *cmd);
 void		exec_builtin(t_cmds *cmd, t_minishell *minishell);
 char		*get_path(char *cmd, t_env *env);
@@ -360,6 +361,7 @@ int			ft_strcmp(const char *s1, const char *s2);
 long long	str_to_num(char *str);
 
 /* MAIN */
+bool		empty_input(char *line);
 void		password(void);
 void		wait_for_child(t_minishell *minishell);
 void		start_minishell(t_minishell *minishell);
